@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
-    "start": "node out/index.js"
+    "start": "nodemon out/index.js"
   },
   "author": "jiornojiovanni, arciducazagaria",
   "license": "ISC",
