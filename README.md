@@ -6,3 +6,7 @@ Steps:
 2) compile with <code>npm build</code>
 3) set up .env file
 4) start the server with <code>npm start</code>
+
+If you are on Linux you need "lib32gcc":
+
+on Ubuntu/Debian use the command <code>sudo apt-get install lib32gcc1</code>
