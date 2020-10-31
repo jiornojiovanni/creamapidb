@@ -10,3 +10,4 @@ Steps:
 If you are on Linux you need "lib32gcc":
 
 on Ubuntu/Debian use the command <code>sudo apt-get install lib32gcc1</code>
+on Arch use the command <code>sudo pacman -S lib32-gcc-libs</code>
