@@ -1,7 +1,7 @@
-import express, { json } from "express";
-import dotenv from "dotenv";
-import steamcmd from "steamcmd";
-import path from "path";
+const express = require("express");
+const dotenv = require("dotenv");
+const steamcmd = require("steamcmd");
+const path = require("path");
 
 dotenv.config();
 
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
     if (req.body.id != "") {
         steamcmd.getAppInfo(req.body.id)
-            .then((result: any) => {
+            .then((result) => {
                 if (JSON.stringify(result) == "{}") {
                     res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
                 } else {
