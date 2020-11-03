@@ -16,19 +16,21 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-app.post("/",  async (req, res) => {
+app.post("/", async (req, res) => {
     if (req.body.id != "") {
         let checkID = await db.idExist(req.body.id);
-        if(checkID == true) {
+        if (checkID == true) {
             let result = await db.getData(req.body.id);
-            res.send(`${result.id} <br> ${result.name} <br> ${result.path} <br>` )
+            res.send(`${result.id} <br> ${result.name} <br> ${result.path} <br>`)
         } else {
             let result = await steamcmd.getAppInfo(req.body.id);
             if (JSON.stringify(result) == "{}") {
                 res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
             } else {
-                res.send(`${req.body.id} <br> ${getName(result)} <br> ${getPath(result)} <br>` )
-                db.cacheId(req.body.id, getName(result), getPath(result));
+                let name = getName(result);
+                let path = getPath(result);
+                res.send(`${req.body.id} <br> ${name} <br> ${path} <br>`)
+                db.cacheId(req.body.id, name, path);
             }
         }
     } else {
@@ -46,9 +48,9 @@ app.listen(port, () => {
 
 function getPath(json) {
     let i = 0;
-    while(json["config"]["launch"].hasOwnProperty(i.toString()) == false)
+    while (json["config"]["launch"].hasOwnProperty(i.toString()) == false)
         i++;
-    return json["config"]["launch"][i.toString()]["executable"].replaceAll( '\\\\', '\\' );
+    return json["config"]["launch"][i.toString()]["executable"].replaceAll('\\\\', '\\');
 }
 
 function getName(json) {
