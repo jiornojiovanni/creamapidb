@@ -1,9 +1,10 @@
-const express = require("express");
 const dotenv = require("dotenv");
+dotenv.config();
+
+const express = require("express");
 const steamcmd = require("steamcmd");
 const path = require("path");
-
-dotenv.config();
+const db = require("./db");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,16 +16,21 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-app.post("/", (req, res) => {
+app.post("/",  async (req, res) => {
     if (req.body.id != "") {
-        steamcmd.getAppInfo(req.body.id)
-            .then((result) => {
-                if (JSON.stringify(result) == "{}") {
-                    res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
-                } else {
-                    res.json(result);
-                }
-            });
+        let checkID = await db.idExist(req.body.id);
+        if(checkID == true) {
+            let result = await db.getData(req.body.id);
+            res.send(`${result.id} <br> ${result.name} <br> ${result.path} <br>` )
+        } else {
+            let result = await steamcmd.getAppInfo(req.body.id);
+            if (JSON.stringify(result) == "{}") {
+                res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
+            } else {
+                res.send(`${req.body.id} <br> ${getName(result)} <br> ${getPath(result)} <br>` )
+                db.cacheId(req.body.id, getName(result), getPath(result));
+            }
+        }
     } else {
         res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
     }
@@ -37,3 +43,14 @@ app.listen(port, () => {
         });
     console.log(`Server is listening on http://127.0.0.1:${port}`);
 });
+
+function getPath(json) {
+    let i = 0;
+    while(json["config"]["launch"].hasOwnProperty(i.toString()) == false)
+        i++;
+    return json["config"]["launch"][i.toString()]["executable"].replaceAll( '\\\\', '\\' );
+}
+
+function getName(json) {
+    return json["common"]["name"];
+}
