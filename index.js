@@ -17,7 +17,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", async (req, res) => {
-    if (req.body.id != "") {
+    //Controllo se l'id è vuoto, se contiene effettivamente un numero e se è solo una stringa di spazi vuoti
+    if (req.body.id != "" && !isNaN(req.body.id) && !isNaN(parseFloat(req.body.id))) {
         let checkID = await db.idExist(req.body.id);
         if (checkID == true) {
             let result = await db.getData(req.body.id);
