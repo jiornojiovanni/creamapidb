@@ -19,19 +19,20 @@ app.get("/", (req, res) => {
 app.post("/", async (req, res) => {
     //Controllo se l'id è vuoto, se contiene effettivamente un numero e se è solo una stringa di spazi vuoti
     if (req.body.id != "" && !isNaN(req.body.id) && !isNaN(parseFloat(req.body.id))) {
-        let checkID = await db.idExist(req.body.id);
+        let id = parseFloat(req.body.id);
+        let checkID = await db.idExist(id);
         if (checkID == true) {
-            let result = await db.getData(req.body.id);
+            let result = await db.getData(id);
             res.send(`${result.id} <br> ${result.name} <br> ${result.path} <br>`)
         } else {
-            let result = await steamcmd.getAppInfo(req.body.id);
+            let result = await steamcmd.getAppInfo(id);
             if (JSON.stringify(result) == "{}") {
                 res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
             } else {
                 let name = getName(result);
                 let gamepath = getPath(result);
-                res.send(`${req.body.id} <br> ${name} <br> ${gamepath} <br>`)
-                db.cacheId(req.body.id, name, gamepath);
+                res.send(`${id} <br> ${name} <br> ${gamepath} <br>`)
+                db.cacheId(id, name, gamepath);
             }
         }
     } else {
