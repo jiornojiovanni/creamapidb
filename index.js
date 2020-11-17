@@ -29,9 +29,9 @@ app.post("/", async (req, res) => {
                 res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
             } else {
                 let name = getName(result);
-                let path = getPath(result);
-                res.send(`${req.body.id} <br> ${name} <br> ${path} <br>`)
-                db.cacheId(req.body.id, name, path);
+                let gamepath = getPath(result);
+                res.send(`${req.body.id} <br> ${name} <br> ${gamepath} <br>`)
+                db.cacheId(req.body.id, name, gamepath);
             }
         }
     } else {
