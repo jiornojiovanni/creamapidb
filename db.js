@@ -9,7 +9,6 @@ exports.idExist = async function (id) {
     } catch (err) {
         console.log(err);
     }
-    console.log(res)
     client.end();
     return res.rows[0].value;
 };
