@@ -35,7 +35,7 @@ app.post("/", async (req, res) => {
             }
         }
     } else {
-        res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
+        res.status(404).send("Hai inserito un ID non valido <br> <a href='/'>Ritenta</a>");
     }
 });
 
