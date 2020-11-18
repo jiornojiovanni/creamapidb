@@ -41,23 +41,21 @@ exports.getData = async function (id) {
     };
 }
 
-exports.getResults = async function (text) {
+exports.searchText = async function (text) {
     const client = new Client();
     let res;
     await client.connect();
     try {
         res = await client.query(`select name from gamedata 
-                                    where to_tsvector(name) @@ to_tsquery(${escapeText(text)})`);
+                                    where to_tsvector(name) @@ to_tsquery('${escapeText(text)}')`);
     } catch (err) {
         console.log(err);
     }
     client.end();
-    let arrayRes = {};
+    let arrayRes = [];
     let rows = (res.rowCount > 5) ? 5 : res.rowCount;
     for (let i = 0; i < rows; i++) {
-        arrayRes[i] = {
-            name: res.rows[i].name
-        }
+        arrayRes.push({ name: res.rows[i].name });
     }
     return arrayRes;
 }
