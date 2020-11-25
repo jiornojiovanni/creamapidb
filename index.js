@@ -51,11 +51,9 @@ app.post('/', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    steamcmd.download()
-        .then(() => {
-            steamcmd.touch();
-        });
+app.listen(port, async () => {
+    await steamcmd.download();
+    await steamcmd.touch();
     console.log(`Server is listening on http://127.0.0.1:${port}`);
 });
 
