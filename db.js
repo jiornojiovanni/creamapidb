@@ -1,4 +1,6 @@
 const { Client } = require('pg');
+const path = require('path');
+const { exec } = require('child_process');
 
 exports.idExist = async function (id) {
     const client = new Client();
@@ -13,11 +15,14 @@ exports.idExist = async function (id) {
     return res.rows[0].value;
 };
 
-exports.cacheId = async function (id, name, path) {
+exports.cacheId = async function (id, name, execPath) {
+    let execParsed = path.win32.parse(execPath);
+    //Rimpiazza il separatore di windows con quello di unix, e se necessario toglie lo slash iniziale
+    let gamepath = (execParsed.root == execParsed.dir) ? '/' : execParsed.dir.replace(/\\/g, '/').replace(/^\//g, '') + '/';
     const client = new Client();
     await client.connect();
     try {
-        await client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${path}')`);
+        await client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${gamepath}')`);
     } catch (err) {
         console.log(err)
     }
@@ -41,12 +46,14 @@ exports.getData = async function (id) {
     };
 }
 
+/* Useless ):
+
 exports.searchText = async function (text) {
     const client = new Client();
     let res;
     await client.connect();
     try {
-        res = await client.query(`select name from gamedata 
+        res = await client.query(`select name from gamedata
                                     where to_tsvector(name) @@ to_tsquery('${escapeText(text)}')`);
     } catch (err) {
         console.log(err);
@@ -63,3 +70,5 @@ exports.searchText = async function (text) {
 function escapeText(text) {
     return text.trim().replace(/ +(?= )/g, '').replace(/[^\w\s]/gi, '').replace(/ /g, "|");
 }
+
+*/
