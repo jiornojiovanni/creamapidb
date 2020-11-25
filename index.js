@@ -24,17 +24,21 @@ app.post('/', async (req, res) => {
         let checkID = await db.idExist(id);
         if (checkID == true) {
             let result = await db.getData(id);
-            let filename = await zipper.buildZip(result.id, result.path);
-            fs.stat(filename, (err) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.download(__dirname + '/' + filename, (err) => {
-                        if (err != null)
-                            console.log(err);
-                    });
-                }
-            });
+            try {
+                let tmpPath = await zipper.buildZip(result.id, result.path);
+                fs.stat(tmpPath, (err) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.download(tmpPath, `${result.name}` + '.zip', (err) => {
+                            if (err != null)
+                                console.log(err);
+                        });
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
         } else {
             let result = await steamcmd.getAppInfo(id);
             if (JSON.stringify(result) == '{}' || result.hasOwnProperty('config') == false) {

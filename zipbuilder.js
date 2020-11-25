@@ -1,37 +1,40 @@
 const fs = require('fs');
-const uuid = require('uuid');
 const archiver = require('archiver');
-const path = require('path');
-const { arch } = require('os');
+const tmp = require('tmp');
+
 
 exports.buildZip = async (id, gamepath) => {
-    const filename = 'cream_cache/zips/' + uuid.v4() + '.zip';
-    const output = fs.createWriteStream(filename);
+    return new Promise((resolve, reject) => {
+        tmp.file(async (err, path, fd) => {
+            if (err) reject(err);
 
-    const archive = archiver('zip');
+            const file = fs.createWriteStream(path);
+            const archive = archiver('zip');
 
-    archive.on('warning', function (err) {
-        if (err.code === 'ENOENT') {
-            console.log(err);
-        } else {
-            throw err;
-        }
+            archive.on('warning', function (err) {
+                if (err.code === 'ENOENT') {
+                    console.log(err);
+                } else {
+                    throw err;
+                }
+            });
+
+            archive.on('error', function (err) {
+                throw err;
+            });
+
+            archive.pipe(file);
+
+            archive.append(getCreamINI(id), { name: gamepath + 'cream_api.ini' });
+            archive.file('cream_cache/steam_api.dll', { name: gamepath + 'steam_api.dll' });
+            archive.file('cream_cache/steam_api64.dll', { name: gamepath + 'steam_api64.dll' });
+            archive.file('cream_cache/steam_api_o.dll', { name: gamepath + 'steam_api_o.dll' });
+            archive.file('cream_cache/steam_api64_o.dll', { name: gamepath + 'steam_api64_o.dll' });
+            await archive.finalize();
+            resolve(path)
+        });
     });
-
-    archive.on('error', function (err) {
-        throw err;
-    });
-
-    archive.pipe(output);
-
-    archive.append(getCreamINI(id), { name: gamepath + 'cream_api.ini' });
-    archive.file('cream_cache/steam_api.dll', { name: gamepath + 'steam_api.dll' });
-    archive.file('cream_cache/steam_api64.dll', { name: gamepath + 'steam_api64.dll' });
-    archive.file('cream_cache/steam_api_o.dll', { name: gamepath + 'steam_api_o.dll' });
-    archive.file('cream_cache/steam_api64_o.dll', { name: gamepath + 'steam_api64_o.dll' });
-    await archive.finalize();
-    return filename;
-};
+}
 
 function getCreamINI(appid) {
     const text =
