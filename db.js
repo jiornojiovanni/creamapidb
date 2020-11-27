@@ -18,7 +18,7 @@ exports.idExist = async function (id) {
 exports.cacheId = async function (id, name, execPath) {
     let execParsed = path.win32.parse(execPath);
     //Rimpiazza il separatore di windows con quello di unix, e se necessario toglie lo slash iniziale
-    let gamepath = (execParsed.root == execParsed.dir) ? '/' : execParsed.dir.replace(/\\/g, '/').replace(/^\//g, '') + '/';
+    let gamepath = (execParsed.root == execParsed.dir) ? '/' : '/' + execParsed.dir.replace(/\\/g, '/').replace(/^\//g, '') + '/';
     const client = new Client();
     await client.connect();
     try {
