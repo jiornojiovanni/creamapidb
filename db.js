@@ -15,7 +15,14 @@ exports.idExist = async (id) => {
     return res.rows[0].value;
 };
 
+<<<<<<< HEAD
 exports.cacheId = async (id, name, execPath) => {
+=======
+exports.cacheId = async function (id, name, execPath) {
+    let execParsed = path.win32.parse(execPath);
+    //Rimpiazza il separatore di windows con quello di unix, e se necessario toglie lo slash iniziale
+    let gamepath = (execParsed.root == execParsed.dir) ? '/' : '/' + execParsed.dir.replace(/\\/g, '/').replace(/^\//g, '') + '/';
+>>>>>>> c60c89ef0c44cd11ce54cfaafd4033899f917444
     const client = new Client();
     await client.connect();
     try {
