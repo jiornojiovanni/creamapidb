@@ -15,8 +15,8 @@ exports.getSteamSearch = (text) => {
                 reject(new Error("Search Error"));
             }
             res.on('data', (data) => {
-                let ids = data2array(data, IDregex);
-                let names = data2array(data, NameRegex);
+                const ids = data2array(data, IDregex);
+                const names = data2array(data, NameRegex);
                 resolve({ id: ids, name: names });
             });
         });

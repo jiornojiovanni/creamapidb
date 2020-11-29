@@ -45,7 +45,7 @@ app.get('/download/:id', async (req, res) => {
                 res.status(400).send("Errore durante la creazione del file zip.");
             }
         } else {
-            let result = await steamcmd.getAppInfo(id);
+            const result = await steamcmd.getAppInfo(id);
             if (JSON.stringify(result) == '{}' || result.hasOwnProperty('config') == false) {
                 res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
             } else {
@@ -84,7 +84,7 @@ function getName(json) {
 }
 
 async function getZipPath(id, path) {
-    let tmpPath = await zipper.buildZip(id, path);
+    const tmpPath = await zipper.buildZip(id, path);
     await fsPromises.stat(tmpPath);
     return tmpPath;
 }
