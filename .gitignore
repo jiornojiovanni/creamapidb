@@ -98,4 +98,4 @@ tests/cases/user/prettier/prettier
 .eslintcache
 .env
 .vscode/
-cream_cache/
+bin/

@@ -26,10 +26,10 @@ exports.buildZip = async (id, gamepath) => {
             archive.pipe(file);
 
             archive.append(getCreamINI(id), { name: gamepath + 'cream_api.ini' });
-            archive.file('cream_cache/steam_api.dll', { name: gamepath + 'steam_api.dll' });
-            archive.file('cream_cache/steam_api64.dll', { name: gamepath + 'steam_api64.dll' });
-            archive.file('cream_cache/steam_api_o.dll', { name: gamepath + 'steam_api_o.dll' });
-            archive.file('cream_cache/steam_api64_o.dll', { name: gamepath + 'steam_api64_o.dll' });
+            archive.file('bin/steam_api.dll', { name: gamepath + 'steam_api.dll' });
+            archive.file('bin/steam_api64.dll', { name: gamepath + 'steam_api64.dll' });
+            archive.file('bin/steam_api_o.dll', { name: gamepath + 'steam_api_o.dll' });
+            archive.file('bin/steam_api64_o.dll', { name: gamepath + 'steam_api64_o.dll' });
             await archive.finalize();
             resolve(path)
         });
