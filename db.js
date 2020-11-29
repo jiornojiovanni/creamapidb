@@ -2,7 +2,7 @@ const { Client } = require('pg');
 const path = require('path');
 const { exec } = require('child_process');
 
-exports.idExist = async function (id) {
+exports.idExist = async (id) => {
     const client = new Client();
     let res;
     await client.connect();
@@ -15,21 +15,18 @@ exports.idExist = async function (id) {
     return res.rows[0].value;
 };
 
-exports.cacheId = async function (id, name, execPath) {
-    let execParsed = path.win32.parse(execPath);
-    //Rimpiazza il separatore di windows con quello di unix, e se necessario toglie lo slash iniziale
-    let gamepath = (execParsed.root == execParsed.dir) ? '/' : execParsed.dir.replace(/\\/g, '/').replace(/^\//g, '') + '/';
+exports.cacheId = async (id, name, execPath) => {
     const client = new Client();
     await client.connect();
     try {
-        await client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${gamepath}')`);
+        await client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${this.escapePath(execPath)}')`);
     } catch (err) {
         console.log(err)
     }
     client.end();
 }
 
-exports.getData = async function (id) {
+exports.getData = async (id) => {
     const client = new Client();
     let res;
     await client.connect();
@@ -46,29 +43,9 @@ exports.getData = async function (id) {
     };
 }
 
-/* Useless ):
-
-exports.searchText = async function (text) {
-    const client = new Client();
-    let res;
-    await client.connect();
-    try {
-        res = await client.query(`select name from gamedata
-                                    where to_tsvector(name) @@ to_tsquery('${escapeText(text)}')`);
-    } catch (err) {
-        console.log(err);
-    }
-    client.end();
-    let arrayRes = [];
-    let rows = (res.rowCount > 5) ? 5 : res.rowCount;
-    for (let i = 0; i < rows; i++) {
-        arrayRes.push({ name: res.rows[i].name });
-    }
-    return arrayRes;
+exports.escapePath = (execPath) => {
+    const execParsed = path.win32.parse(execPath);
+    //Rimpiazza il separatore di windows con quello di unix, e se necessario toglie lo slash iniziale
+    const gamepath = (execParsed.root == execParsed.dir) ? '/' : '/' + execParsed.dir.replace(/\\/g, '/').replace(/^\//g, '') + '/';
+    return gamepath;
 }
-
-function escapeText(text) {
-    return text.trim().replace(/ +(?= )/g, '').replace(/[^\w\s]/gi, '').replace(/ /g, "|");
-}
-
-*/

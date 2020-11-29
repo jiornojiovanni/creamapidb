@@ -5,7 +5,8 @@ const express = require('express');
 const steamcmd = require('steamcmd');
 const path = require('path');
 const db = require('./db');
-const fs = require('fs');
+const steam = require('./steamsearch');
+const fsPromises = require('fs').promises;
 const zipper = require('./zipbuilder');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,41 +18,51 @@ app.get('/', async (req, res) => {
     res.render('index');
 });
 
-app.post('/', async (req, res) => {
-    //Controllo se l'id è vuoto, se contiene effettivamente un numero e se è solo una stringa di spazi vuoti
-    if (req.body.id != '' && !isNaN(req.body.id) && !isNaN(parseFloat(req.body.id))) {
-        let id = parseFloat(req.body.id);
-        let checkID = await db.idExist(id);
+app.post('/search', async (req, res) => {
+    try {
+        const data = await steam.getSteamSearch(req.body.text);
+        res.render('result', { data: data, query: req.body.text });
+    } catch (error) {
+        res.send("Error with the search query.");
+    }
+});
+
+app.get('/download', (req, res) => {
+    res.redirect('/');
+});
+
+app.get('/download/:id', async (req, res) => {
+    const id = parseFloat(req.params.id);
+    if (Number.isInteger(id) && !isNaN(id) && id != null) {
+        const checkID = await db.idExist(id);
         if (checkID == true) {
-            let result = await db.getData(id);
+            const result = await db.getData(id);
             try {
-                let tmpPath = await zipper.buildZip(result.id, result.path);
-                fs.stat(tmpPath, (err) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        res.download(tmpPath, `${result.name}` + '.zip', (err) => {
-                            if (err != null)
-                                console.log(err);
-                        });
-                    }
-                });
+                const zipPath = await getZipPath(result.id, result.path);
+                res.download(zipPath, result.name + '.zip');
             } catch (error) {
                 console.log(error);
+                res.status(400).send("Errore durante la creazione del file zip.");
             }
         } else {
             let result = await steamcmd.getAppInfo(id);
             if (JSON.stringify(result) == '{}' || result.hasOwnProperty('config') == false) {
-                res.status(404).send("Non ho trovato niente! <br> <a href=' / '>Ritenta</a>");
+                res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
             } else {
                 let name = getName(result);
                 let execPath = getPath(result);
-                res.send(`${id} < br > ${name} < br > ${execPath} <br>`)
                 db.cacheId(id, name, execPath);
+                try {
+                    const zipPath = await getZipPath(id, db.escapePath(execPath));
+                    res.download(zipPath, name + '.zip');
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send("Errore durante la creazione del file zip.");
+                }
             }
         }
     } else {
-        res.status(404).send("Hai inserito un ID non valido <br> <a href=' / '>Ritenta</a>");
+        res.status(404).send("ID Non valido.");
     }
 });
 
@@ -70,4 +81,10 @@ function getPath(json) {
 
 function getName(json) {
     return json["common"]["name"];
+}
+
+async function getZipPath(id, path) {
+    let tmpPath = await zipper.buildZip(id, path);
+    await fsPromises.stat(tmpPath);
+    return tmpPath;
 }
