@@ -18,12 +18,12 @@ exports.getSteamSearch = (text) => {
                 let resultArray = [];
                 const dom = new JSDOM(data.toString());
                 dom.window.document.querySelectorAll('a').forEach((elm) => {
-                    resultArray.push( 
-                    {
-                        name: elm.querySelector('.match_name').textContent, 
-                        id: elm.getAttribute('data-ds-appid'), 
-                        img: elm.querySelector('img').getAttribute('src')
-                    });
+                    resultArray.push(
+                        {
+                            name: elm.querySelector('.match_name').textContent,
+                            id: elm.getAttribute('data-ds-appid'),
+                            img: elm.querySelector('img').getAttribute('src')
+                        });
                 });
                 resolve(resultArray);
             });
