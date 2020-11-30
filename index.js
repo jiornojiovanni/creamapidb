@@ -3,13 +3,14 @@ dotenv.config();
 
 const express = require('express');
 const steamcmd = require('steamcmd');
+const fsPromises = require('fs').promises;
 const path = require('path');
 const db = require('./db');
-const steam = require('./steamsearch');
-const fsPromises = require('fs').promises;
 const zipper = require('./zipbuilder');
+const steam = require('./steamsearch');
 const app = express();
 const port = process.env.PORT || 3000;
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));

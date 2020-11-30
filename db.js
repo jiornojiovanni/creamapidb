@@ -1,6 +1,5 @@
 const { Client } = require('pg');
 const path = require('path');
-const { exec } = require('child_process');
 
 exports.idExist = async (id) => {
     const client = new Client();
