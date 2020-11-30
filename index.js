@@ -55,7 +55,8 @@ app.get('/download/:id', async (req, res) => {
             } else {
                 let name = getName(result);
                 let execPath = getPath(result);
-                db.cacheId(id, name, execPath);
+                //Cache the data in the db, so we can use it in subsequent search, no need to await it.
+                db.cacheData(id, name, execPath);
                 try {
                     const zipPath = await getZipPath(id, db.escapePath(execPath));
                     res.download(zipPath, name + '.zip');

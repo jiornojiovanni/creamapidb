@@ -15,7 +15,7 @@ exports.idExist = async (id) => {
     return res.rows[0].value;
 };
 
-exports.cacheId = async (id, name, execPath) => {
+exports.cacheData = async (id, name, execPath) => {
     const client = new Client();
     await client.connect();
     try {
@@ -45,7 +45,7 @@ exports.getData = async (id) => {
 
 exports.escapePath = (execPath) => {
     const execParsed = path.win32.parse(execPath);
-    //Rimpiazza il separatore di windows con quello di unix, e se necessario toglie lo slash iniziale
+    //Replace Windows separator with Unix one, and add slash at the start of the string if necessary.
     const gamepath = (execParsed.root == execParsed.dir) ? '/' : '/' + execParsed.dir.replace(/\\/g, '/').replace(/^\//g, '') + '/';
     return gamepath;
 }
