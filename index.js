@@ -74,8 +74,14 @@ app.get('/download/:id', async (req, res) => {
 });
 
 app.listen(port, async () => {
-    await steamcmd.download();
-    await steamcmd.touch();
+    //We check if the steamcmd is working and is updated, if not we can just exit the process with error code as it would be useless to continue.
+    try {
+        await steamcmd.download();
+        await steamcmd.touch();
+    } catch (error) {
+        console.log(error);
+        process.exitCode(-1);
+    }
     console.log(`Server is listening on http://127.0.0.1:${port}`);
 });
 
