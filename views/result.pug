@@ -1,4 +1,5 @@
 h2 Ricerca: #{query}
-for element, index in data.id
-    a(href="/download/" + element)= data.name[index]
+for element in data
+    a(href="/download/" + element.id)= element.name
+        img(src=element.img)
     br
