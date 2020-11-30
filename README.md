@@ -4,7 +4,8 @@ Steps:
 
 1) install dependencies with <code>npm install</code>
 2) set up .env file
-3) start the server with <code>npm start</code>
+3) set up bin folder with cream api DLL and steam DLL
+4) start the server with <code>npm start</code>
 
 If you are on Linux you need "lib32gcc":
 
