@@ -28,6 +28,7 @@ app.post('/search', async (req, res) => {
 });
 
 app.get('/download', (req, res) => {
+    //Redirect if there is no id in the link.
     res.redirect('/');
 });
 
@@ -35,6 +36,7 @@ app.get('/download/:id', async (req, res) => {
     const id = parseFloat(req.params.id);
     if (Number.isInteger(id) && !isNaN(id) && id != null) {
         const checkID = await db.idExist(id);
+        //If the id exists in the DB we can query it so it's much faster.
         if (checkID == true) {
             const result = await db.getData(id);
             try {
@@ -45,7 +47,9 @@ app.get('/download/:id', async (req, res) => {
                 res.status(400).send("Errore durante la creazione del file zip.");
             }
         } else {
+            //Otherwise we have to query the steam api, suuuuuper slow.
             const result = await steamcmd.getAppInfo(id);
+            //Some game are missing fundamental information in their json (e.g. CSGO).
             if (JSON.stringify(result) == '{}' || result.hasOwnProperty('config') == false) {
                 res.status(404).send("Non ho trovato niente! <br> <a href='/'>Ritenta</a>");
             } else {
@@ -62,6 +66,7 @@ app.get('/download/:id', async (req, res) => {
             }
         }
     } else {
+        //Catch all malformed id (e.g. if the user try to directly input the id in the link).
         res.status(404).send("ID Non valido.");
     }
 });
@@ -85,6 +90,7 @@ function getName(json) {
 
 async function getZipPath(id, path) {
     const tmpPath = await zipper.buildZip(id, path);
+    //We check if file exists before returning it as Archiver lib is a bit bugged.
     await fsPromises.stat(tmpPath);
     return tmpPath;
 }

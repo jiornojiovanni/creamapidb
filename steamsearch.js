@@ -10,6 +10,7 @@ exports.getSteamSearch = (text) => {
             method: 'GET'
         };
         const req = https.request(options, (res) => {
+            //Steam return a 0 lenght body if there are no results.
             if (res.headers['content-length'] == 0) {
                 req.abort();
                 reject(new Error("Search Error"));
