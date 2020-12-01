@@ -1,13 +1,30 @@
 const { Client } = require('pg');
 const path = require('path');
 
+exports.checkDB = async () => {
+    try {
+        await client.connect();
+        client.end();
+    } catch (err) {
+        if (err.code = "ECONNREFUSED") {
+            console.log("The database is not on, idiot.");
+            process.exit(0);
+        }
+        console.log(err);
+    }
+}
+
 exports.idExist = async (id) => {
     const client = new Client();
     let res;
-    await client.connect();
     try {
+        await client.connect();
         res = await client.query(`select exists(select 1 from gamedata where id=${id}) as value`);
     } catch (err) {
+        if (err.code = "ECONNREFUSED") {
+            console.log("The database is not on, idiot.");
+            process.exit(0);
+        }
         console.log(err);
     }
     client.end();
@@ -16,11 +33,15 @@ exports.idExist = async (id) => {
 
 exports.cacheData = async (id, name, execPath) => {
     const client = new Client();
-    await client.connect();
     try {
+        await client.connect();
         await client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${this.escapePath(execPath)}')`);
     } catch (err) {
-        console.log(err)
+        if (err.code = "ECONNREFUSED") {
+            console.log("The database is not on, idiot.");
+            process.exit(0);
+        }
+        console.log(err);
     }
     client.end();
 }
@@ -28,10 +49,14 @@ exports.cacheData = async (id, name, execPath) => {
 exports.getData = async (id) => {
     const client = new Client();
     let res;
-    await client.connect();
     try {
+        await client.connect();
         res = await client.query(`select id, name, path from gamedata where id=${id}`);
     } catch (err) {
+        if (err.code = "ECONNREFUSED") {
+            console.log("The database is not on, idiot.");
+            process.exit(0);
+        }
         console.log(err);
     }
     client.end();
