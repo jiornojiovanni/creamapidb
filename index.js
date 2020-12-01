@@ -81,7 +81,7 @@ app.listen(port, async () => {
     } catch (error) {
         console.log(error);
         console.log("Problems with SteamCMD.");
-        process.exitCode(-1);
+        process.exit(-1);
     }
     await db.checkDB();
     console.log(`Server is listening on http://127.0.0.1:${port}`);
