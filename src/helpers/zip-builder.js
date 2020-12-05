@@ -1,14 +1,14 @@
-const fs = require('fs');
-const archiver = require('archiver');
-const tmp = require('tmp');
+import { createWriteStream } from 'fs';
+import archiver from 'archiver';
+import { file as _file } from 'tmp';
+import { promises as fsPromises } from 'fs';
 
-
-exports.buildZip = async (id, gamepath) => {
+const buildZip = function buildZip({ id, gamepath }) {
     return new Promise((resolve, reject) => {
-        tmp.file(async (err, path, fd) => {
+        _file((err, path, fd) => {
             if (err) reject(err);
 
-            const file = fs.createWriteStream(path);
+            const file = createWriteStream(path);
             const archive = archiver('zip');
 
             archive.on('warning', function (err) {
@@ -30,13 +30,17 @@ exports.buildZip = async (id, gamepath) => {
             archive.file('bin/steam_api64.dll', { name: gamepath + 'steam_api64.dll' });
             archive.file('bin/steam_api_o.dll', { name: gamepath + 'steam_api_o.dll' });
             archive.file('bin/steam_api64_o.dll', { name: gamepath + 'steam_api64_o.dll' });
-            await archive.finalize();
-            resolve(path)
+            archive.finalize()
+                .then(() => {
+                    //We check if file exists before returning it as Archiver lib is a bit bugged.
+                    return fsPromises.stat(path);
+                })
+                .then(() => { resolve(path); });
         });
     });
 }
 
-function getCreamINI(appid) {
+const getCreamINI = (appid) => {
     const text =
         '[steam]\n' +
         `appid = ${appid}\n` +
@@ -51,3 +55,5 @@ function getCreamINI(appid) {
 
     return text;
 }
+
+export default buildZip;
