@@ -4,7 +4,7 @@ import { STEAM } from '../config/constants'
 
 export function getSteamSearch(text) {
     return new Promise((resolve, reject) => {
-        axios.get(`https://store.steampowered.com/search/results?&category1=998&term=${text}`)
+        axios.get(STEAM.SEARCH.URL, { params: STEAM.SEARCH.OPTIONS(text)})
             .then((response) => {
                 const dom = new JSDOM(response.data);
                 const results = dom.window.document.querySelectorAll('a');
