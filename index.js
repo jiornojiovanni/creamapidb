@@ -6,6 +6,7 @@ import { join } from 'path';
 import download from './src/routes/download';
 import search from './src/routes/search'
 import { connectDb } from './src/helpers/db';
+import { ERRORS } from './src/config/constants';
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -38,7 +39,7 @@ app.listen(port, () => {
             console.log(`Server is listening on http://127.0.0.1:${port}`);
         })
         .catch((err) => {
-            if (err.code = "ECONNREFUSED")
+            if (err.code = ERRORS.CONNECTION_REFUSED)
                 console.log("The database can't be reached.");
             else
                 console.log("SteamCMD can't be reached.");
