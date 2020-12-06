@@ -11,14 +11,8 @@ export function getSteamSearch(text) {
                 const doc = dom.window.document.querySelector('#search_resultsRows')
                 if (!doc) return resolve([]);
                 const results = doc.querySelectorAll('a');
-<<<<<<< HEAD
-                const length = Math.min(results.length,STEAM.MAX_RESULTS);
-=======
-                let resultArray = [];
-                const length = Math.min(results.length, STEAM.MAX_RESULTS);
-
->>>>>>> e5011409a01e2bc065c8df891882409fe27790e3
-                for (let i = 0; i < length; i++) {
+                const count = Math.min(results.length, STEAM.MAX_RESULTS);
+                for (let i = 0; i < count; i++) {
                     const e = results[i];
                     resultArray.push({
                         name: e.querySelector('.title').textContent,
