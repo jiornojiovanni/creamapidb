@@ -5,7 +5,7 @@ import { download as install, touch } from 'steamcmd';
 import { join } from 'path';
 import download from './src/routes/download';
 import search from './src/routes/search'
-import { checkDb } from './src/helpers/db';
+import { connectDb } from './src/helpers/db';
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -32,7 +32,7 @@ app.listen(port, () => {
             return touch();
         })
         .then(() => {
-            return checkDb();
+            return connectDb();
         })
         .then(() => {
             console.log(`Server is listening on http://127.0.0.1:${port}`);

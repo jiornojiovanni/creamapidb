@@ -1,11 +1,10 @@
 import { Client } from 'pg';
 
-export const checkDb = function checkDatabase() {
+export const connectDb = function connectDb() {
     const client = new Client();
     return new Promise((resolve, reject) => {
         client.connect()
             .then(() => {
-                client.end();
                 resolve();
             })
             .catch((err) => {
@@ -22,7 +21,6 @@ export const cacheData = function cacheData(id, name, execPath) {
                 return client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${execPath}')`);
             })
             .then(() => {
-                client.end();
                 resolve();
             })
             .catch((err) => {
@@ -39,7 +37,6 @@ export const getGameData = function getData(id) {
                 return client.query(`select id, name, path from gamedata where id=${id}`);
             })
             .then(({ rows }) => {
-                client.end();
                 resolve(rows[0]);
             })
             .catch((err) => {
