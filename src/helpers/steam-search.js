@@ -6,15 +6,12 @@ export function getSteamSearch(text) {
     return new Promise((resolve, reject) => {
         axios.get(STEAM.SEARCH.URL, { params: STEAM.SEARCH.OPTIONS(text)})
             .then((response) => {
+                let resultArray = [];
                 const dom = new JSDOM(response.data);
                 const doc = dom.window.document.querySelector('#search_resultsRows')
-
                 if (!doc) return resolve([]);
-
                 const results = doc.querySelectorAll('a');
-                let resultArray = [];
-                const length = results.length > STEAM.MAX_RESULTS ? STEAM.MAX_RESULTS : results.length;
-
+                const length = Math.min(results.length,STEAM.MAX_RESULTS);
                 for (let i = 0; i < length; i++) {
                     const e = results[i];
                     resultArray.push({
@@ -24,6 +21,7 @@ export function getSteamSearch(text) {
                     });
                 }
                 resolve(resultArray);
-            });
+            })
+            .catch((err) => { reject(err); });
     });
 }
