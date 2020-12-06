@@ -3,7 +3,7 @@ import archiver from 'archiver';
 import { file as _file } from 'tmp';
 import { promises as fsPromises } from 'fs';
 
-const buildZip = function buildZip({ id, gamepath }) {
+const buildZip = ({ id, gamepath }) => {
     return new Promise((resolve, reject) => {
         _file((err, path, fd) => {
             if (err) reject(err);

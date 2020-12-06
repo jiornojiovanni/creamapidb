@@ -3,7 +3,7 @@ import escapePath from '../utils/escapePath';
 import getName from '../utils/getName';
 import getPath from '../utils/getPath';
 
-const searchSteamCMD = function searchSteamCMD(id) {
+const searchSteamCMD = (id) => {
     return steamcmd.getAppInfo(id)
         .then((result) => {
             //Some game are missing fundamental information in their json (e.g. CSGO).

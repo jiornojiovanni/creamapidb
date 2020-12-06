@@ -8,7 +8,7 @@ const checkServices = () => {
             .then(() => {
                 console.log('SteamCMD is up-to-date.');
             })
-            .catch((err) => {
+            .catch(() => {
                 console.log('SteamCMD is not up-to-date.');
                 steamcmd.install()
                     .then(() => {
