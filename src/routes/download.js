@@ -1,10 +1,7 @@
 import Router from 'express';
-import { getAppInfo } from 'steamcmd';
-import { cacheData, getGameData } from '../helpers/db';
+import { getGameData } from '../helpers/db';
 import buildZip from '../helpers/zip-builder';
-import escapePath from '../utils/escapePath';
-import getName from '../utils/getName';
-import getPath from '../utils/getPath';
+import searchSteamCMD from '../helpers/steam-cmd';
 import { ERRORS } from '../config/constants';
 
 const router = Router();
@@ -29,19 +26,6 @@ router.get('/download/:id', (req, res) => {
 router.get('/download', (req, res) => {
     res.redirect('/');
 });
-
-const searchSteamCMD = function searchSteamCMD(id) {
-    return getAppInfo(id)
-        .then((result) => {
-            //Some game are missing fundamental information in their json (e.g. CSGO).
-            if (JSON.stringify(result) == '{}' || !result.hasOwnProperty('config')) return null;
-            const path = escapePath(getPath(result));
-            const name = getName(result);
-            //Cache the data in the db, so we can use it in subsequent search, no need to await it.
-            cacheData(id, name, path);
-            return { id, name, path };
-        });
-}
 
 const getData = function getData(id) {
     return new Promise((resolve, reject) => {
