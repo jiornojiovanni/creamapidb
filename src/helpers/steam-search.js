@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
 import { STEAM } from '../config/constants'
-const maxResults = 5;
 
 export function getSteamSearch(text) {
     return new Promise((resolve, reject) => {
