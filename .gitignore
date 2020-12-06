@@ -99,4 +99,3 @@ tests/cases/user/prettier/prettier
 .env
 .vscode/
 bin/
-steam-cmd/

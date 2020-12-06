@@ -1,12 +1,10 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express, { urlencoded } from 'express';
-import { download as install, touch } from 'steamcmd';
 import { join } from 'path';
 import download from './src/routes/download';
-import search from './src/routes/search'
-import { connectDb } from './src/helpers/db';
-import { ERRORS } from './src/config/constants';
+import search from './src/routes/search';
+import checkServices from './src/helpers/check';
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -26,23 +24,12 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.listen(port, () => {
-    //We check if the steamcmd is working and is updated, if not we can just exit the process with error code as it would be useless to continue.
-    install()
-        .then(() => {
-            return touch();
+checkServices()
+    .then(() => {
+        app.listen(port, () => {
+            console.log("Server is listening at http://localhost:" + port);
         })
-        .then(() => {
-            return connectDb();
-        })
-        .then(() => {
-            console.log(`Server is listening on http://127.0.0.1:${port}`);
-        })
-        .catch((err) => {
-            if (err.code = ERRORS.CONNECTION_REFUSED)
-                console.log("The database can't be reached.");
-            else
-                console.log("SteamCMD can't be reached.");
-            process.exit(0);
-        });
-});
+    })
+    .catch((err) => {
+        process.exit(err);
+    })

@@ -8,9 +8,7 @@ export function getSteamSearch(text) {
             .then((response) => {
                 let resultArray = [];
                 const dom = new JSDOM(response.data);
-                const doc = dom.window.document.querySelector('#search_resultsRows')
-                if (!doc) return resolve([]);
-                const results = doc.querySelectorAll('a');
+                const results = dom.window.document.querySelectorAll('a.search_result_row.ds_collapse_flag');
                 const count = Math.min(results.length, STEAM.MAX_RESULTS);
                 for (let i = 0; i < count; i++) {
                     const e = results[i];

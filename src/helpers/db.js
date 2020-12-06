@@ -1,6 +1,6 @@
 import { Client } from 'pg';
 
-export const connectDb = function connectDb() {
+export const connectDb = () => {
     const client = new Client();
     return new Promise((resolve, reject) => {
         client.connect()
@@ -13,7 +13,7 @@ export const connectDb = function connectDb() {
     });
 }
 
-export const cacheData = function cacheData(id, name, execPath) {
+export const cacheGameInfo = ({ id, name, execPath }) => {
     const client = new Client();
     return new Promise((resolve, reject) => {
         client.connect()
@@ -29,7 +29,7 @@ export const cacheData = function cacheData(id, name, execPath) {
     });
 }
 
-export const getGameData = function getData(id) {
+export const getGameInfo = (id) => {
     const client = new Client();
     return new Promise((resolve, reject) => {
         client.connect()

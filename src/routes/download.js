@@ -1,5 +1,5 @@
 import Router from 'express';
-import { getGameData } from '../helpers/db';
+import { getGameInfo, cacheGameInfo } from '../helpers/db';
 import buildZip from '../helpers/zip-builder';
 import searchSteamCMD from '../helpers/steam-cmd';
 import { ERRORS } from '../config/constants';
@@ -27,18 +27,13 @@ router.get('/download', (req, res) => {
     res.redirect('/');
 });
 
-const getData = function getData(id) {
-    return new Promise((resolve, reject) => {
-        getGameData(id)
-            .then((result) => {
-                if (result)
-                    return (result);
-                else
-                    return (searchSteamCMD(id))
-            })
-            .then((result) => {
-                resolve(result);
-            });
+const getData = (id) => {
+    return new Promise(async (resolve, reject) => {
+        const result = await getGameInfo(id);
+        if (result) return resolve(result);
+        const steam_result = await searchSteamCMD(id);
+        cacheGameInfo(steam_result);
+        resolve(steam_result);
     });
 }
 
