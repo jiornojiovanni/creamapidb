@@ -7,9 +7,12 @@ export function getSteamSearch(text) {
         axios.get(STEAM.SEARCH.URL, { params: STEAM.SEARCH.OPTIONS(text)})
             .then((response) => {
                 const dom = new JSDOM(response.data);
-                const results = dom.window.document.querySelectorAll('a');
-                let resultArray = [];
+                const doc = dom.window.document.querySelector('#search_resultsRows')
 
+                if (!doc) return resolve([]);
+
+                const results = doc.querySelectorAll('a');
+                let resultArray = [];
                 const length = results.length > STEAM.MAX_RESULTS ? STEAM.MAX_RESULTS : results.length;
 
                 for (let i = 0; i < length; i++) {
