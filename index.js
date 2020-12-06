@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express, { urlencoded } from 'express';
+import express from 'express';
 import { join } from 'path';
 import download from './src/routes/download';
 import search from './src/routes/search';
@@ -12,7 +12,6 @@ const port = process.env.PORT || 3000;
 
 app.set('views', join(__dirname, '/views'));
 app.set('view engine', 'pug');
-app.use(urlencoded({ extended: true }));
 
 // GET Download
 app.use(download);
@@ -29,8 +28,6 @@ checkServices()
     .then(() => {
         app.listen(port, () => {
             console.log("Server is listening at http://localhost:" + port);
-        })
+        });
     })
-    .catch((err) => {
-        process.exit(err);
-    })
+    .catch((err) => { process.exit(err); });

@@ -16,7 +16,7 @@ router.get('/download/:id', (req, res) => {
             return Promise.all([buildZip({ id: result.id, gamepath: result.path }), result.name]);
         })
         .then(([path, name]) => {
-            res.download(path, name + '.zip');
+            res.download(path, `${name.toLowerCase()}.zip`);
         })
         .catch((err) => {
             res.json({ err: err.message });

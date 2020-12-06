@@ -10,7 +10,7 @@ router.get('/search', (req, res) => {
         })
         .catch((err) => {
             console.log(err);
-            res.json({});
+            res.json({ error: 'Internal server error'});
         })
 });
 
