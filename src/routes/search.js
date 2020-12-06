@@ -1,4 +1,4 @@
-import { getSteamSearch } from '../helpers/steam-search';
+import getSteamSearch from '../helpers/steam-search';
 import Router from 'express';
 
 const router = Router();
