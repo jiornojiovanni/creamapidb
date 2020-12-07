@@ -12,16 +12,17 @@ const port = process.env.PORT || 3000;
 
 app.set('views', join(__dirname, '/views'));
 app.set('view engine', 'pug');
+app.use('/public', express.static(__dirname + '/views/public'));
 
-// GET Download
 app.use(download);
-
-//GET Search
 app.use(search);
 
-// GET Index
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/', function (req, res) {
+    res.render('game-search');
+});
+
+app.get('/404', function (req, res) {
+    res.render('not-found');
 });
 
 checkServices()

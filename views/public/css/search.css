@@ -1,0 +1,81 @@
+@import './style.css';
+@import './pretty-checkbox.min.css';
+
+.pretty.p-default input:checked~.state label:after {
+    background-color: #23516d!important;
+}
+
+.checkbox-list {
+  display: flex;
+  font-size: 25px;
+  color: #305d8a;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+#console {
+  display: flex;
+  flex-direction: row;
+}
+
+.symbol {
+  color: #305d8a;
+  margin-right: 10px;
+}
+
+#search {
+  position: relative;
+}
+
+.field {
+  text-decoration: none;
+}
+
+#game-list {
+  position: absolute;
+  right: 0;
+  top: 80;
+  font-size: 20px;
+  background-color: #212d3d;
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0.2s linear, opacity 0.2s linear;
+}
+
+ #game-list.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.result {
+  color:#617890;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.not-found {
+  height: 45px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: default;
+}
+
+.result:hover:not(.not-found), .result:focus:not(.not-found) {
+  background-color: #1c4056;
+  outline: none;
+}
+
+.game-img {
+  width: 120px;
+  height: 45px;
+}
+
+.game-name {
+  margin-left: 10px;
+  margin-right: 10px;
+}

@@ -1,0 +1,47 @@
+html
+    head
+        title='creamapi-db'
+        link(rel='stylesheet', href='public/css/search.css')
+        link(rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon")
+        link(rel="icon" href="public/img/favicon.ico" type="image/x-icon")
+    body
+        div(class='flex-center')
+            div(class='checkbox-list')
+                div(class="pretty p-default p-smooth")
+                    input(id='wrapper' type="checkbox")
+                    div(class="state")
+                        label Wrapper
+                div(class="pretty p-default p-smooth" style='margin-right: 0px;')
+                    input(id='dlcs' type="checkbox")
+                    div(class="state")
+                        label DLCs
+            div(id='console')
+                p(class='symbol')='>'
+                div(id='search')
+                    p(class='field' spellcheck="false" contenteditable="true" placeholder='search in db')
+                    div(id='game-list')
+                        a(class='result not-found') No results found
+                        a(class='result' tabindex="0" style="display: none;")
+                            div(class='game-img')
+                                img(src='')
+                            div(class='game-name')
+                        a(class='result' tabindex="0" style="display: none;")
+                            div(class='game-img')
+                                img(src='')
+                            div(class='game-name')
+                        a(class='result' tabindex="0" style="display: none;")
+                            div(class='game-img')
+                                img(src='')
+                            div(class='game-name')
+                        a(class='result' tabindex="0" style="display: none;")
+                            div(class='game-img')
+                                img(src='')
+                            div(class='game-name')
+                        a(class='result' tabindex="0" style="display: none;")
+                            div(class='game-img')
+                                img(src='')
+                            div(class='game-name')
+        script(src='public/js/script.js')
+
+
+                                
