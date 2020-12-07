@@ -12,7 +12,7 @@ router.get('/download/:id', (req, res) => {
     if (id == null && !Number.isInteger(id) && isNaN(id)) return res.status(400).json({});
     getData(id)
         .then((result) => {
-            return Promise.all([buildZip({ id: result.id, gamePath: result.path }), result.name]);
+            return Promise.all([buildZip({ id: result.id, gamePath: result.path, dlc: req.query.dlc }), result.name]);
         })
         .then(([path, name]) => {
             res.download(path, `${name.toLowerCase()}.zip`);
@@ -37,8 +37,8 @@ const getData = (id) => {
             .then(([result, toCache]) => {
                 if (toCache) {
                     resolve(result);
-                    return cacheGameInfo(result);      
-                }          
+                    return cacheGameInfo(result);
+                }
             })
             .catch((err) => {
                 reject(err);
