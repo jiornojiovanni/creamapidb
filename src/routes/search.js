@@ -4,7 +4,8 @@ import Router from 'express';
 const router = Router();
 
 router.get('/search', (req, res) => {
-    getSteamSearch(req.query.term)
+    const term = req.query.term || '';
+    getSteamSearch(term)
         .then((data) => {
             res.json(data);
         })
