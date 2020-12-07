@@ -1,4 +1,4 @@
-import getDLClist from './dlc';
+import getDLCs from './dlc';
 
 const getCreamINI = (appid, dlc) => {
     let text =
@@ -13,14 +13,15 @@ const getCreamINI = (appid, dlc) => {
         'disableuserinterface = false\n' +
         '[dlc]';
 
-    return getDLClist(appid)
+    return getDLCs(appid)
         .then((res) => {
             if (dlc == 'false') return text;
-            res.forEach(element => {
-                text += "\n" + element;
-            });
+            if (res) res.forEach(element => { text += "\n" + element; });
             return text;
-        });
+        })
+        .catch((err) => {
+            console.log(err.message);
+        })
 }
 
 export default getCreamINI;
