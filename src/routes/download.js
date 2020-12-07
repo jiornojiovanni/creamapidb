@@ -2,17 +2,18 @@ import Router from 'express';
 import { getGameInfo, cacheGameInfo } from '../helpers/db';
 import buildZip from '../helpers/zip-builder';
 import searchSteamCMD from '../helpers/steam-cmd';
-import { ERRORS } from '../config/constants';
 
 const router = Router();
 
 router.get('/download/:id', (req, res) => {
-    const id = parseFloat(req.params.id);
+    const id      = req.params.id || null;
+    const dlc     = req.params.dlc || false;
+    const wrapper = req.params.wrapper || false;
     //Catch all malformed id (e.g. if the user try to directly input the id in the link).
-    if (id == null && !Number.isInteger(id) && isNaN(id)) return res.status(400).json({});
+    if (id == null && !Number.isInteger(id)) return res.status(400).json({});
     getData(id)
         .then((result) => {
-            return Promise.all([buildZip({ id: result.id, gamePath: result.path, dlc: req.query.dlc }), result.name]);
+            return Promise.all([buildZip({ id, gamePath: result.path, dlc }), result.name]);
         })
         .then(([path, name]) => {
             res.download(path, `${name.toLowerCase()}.zip`);
@@ -31,11 +32,14 @@ const getData = (id) => {
     return new Promise((resolve, reject) => {
         getGameInfo(id)
             .then((result) => {
-                if (result) return resolve(result)
-                return Promise.all([searchSteamCMD(id), result == null]);
+                if (result) {
+                    return resolve(result);
+                } else {
+                    return searchSteamCMD(id);
+                }
             })
-            .then(([result, toCache]) => {
-                if (toCache) {
+            .then((result = null) => {
+                if (result) {
                     resolve(result);
                     return cacheGameInfo(result);
                 }
