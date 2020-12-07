@@ -8,7 +8,7 @@ import { STEAM, ERRORS } from '../src/config/constants';
 describe("UNIT TESTS", () => {
 
     describe("Testing Steam Search...", () => {
-        it("Is it correctly returning only the maximum amount of elements from Steam-CMD?", async () => {
+        it("Is it correctly returning only the maximum amount of elements from SteamCMD?", async () => {
             const res = await getSteamSearch("counter strike");
             expect(res.length).to.equal(STEAM.MAX_RESULTS);
         });
