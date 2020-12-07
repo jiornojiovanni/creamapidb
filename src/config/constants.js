@@ -8,7 +8,7 @@ const STEAM = {
 
 const ERRORS = {
     CONNECTION_REFUSED: "ECONNREFUSED",
-    MISSING_DATA: "Could not get gamedata."
+    MISSING_DATA: "Missing config in game infos."
 }
 
 export {
