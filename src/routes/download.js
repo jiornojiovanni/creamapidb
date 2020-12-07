@@ -12,14 +12,14 @@ router.get('/download/:id', (req, res) => {
     if (id == null && !Number.isInteger(id) && isNaN(id)) return res.status(400).json({});
     getData(id)
         .then((result) => {
-            if (!result) throw new Error(ERRORS.MISSING_DATA);
-            return Promise.all([buildZip({ id: result.id, gamepath: result.path }), result.name]);
+            return Promise.all([buildZip({ id: result.id, gamePath: result.path }), result.name]);
         })
         .then(([path, name]) => {
             res.download(path, `${name.toLowerCase()}.zip`);
         })
         .catch((err) => {
             res.json({ err: err.message });
+            console.error(err);
         });
 });
 
@@ -28,12 +28,21 @@ router.get('/download', (req, res) => {
 });
 
 const getData = (id) => {
-    return new Promise(async (resolve, reject) => {
-        const result = await getGameInfo(id);
-        if (result) return resolve(result);
-        const steam_result = await searchSteamCMD(id);
-        cacheGameInfo(steam_result);
-        resolve(steam_result);
+    return new Promise((resolve, reject) => {
+        getGameInfo(id)
+            .then((result) => {
+                if (result) return resolve(result)
+                return Promise.all([searchSteamCMD(id), result == null]);
+            })
+            .then(([result, toCache]) => {
+                if (toCache) {
+                    resolve(result);
+                    return cacheGameInfo(result);      
+                }          
+            })
+            .catch((err) => {
+                reject(err);
+            });
     });
 }
 

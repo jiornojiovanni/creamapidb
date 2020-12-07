@@ -6,11 +6,11 @@ const router = Router();
 router.get('/search', (req, res) => {
     getSteamSearch(req.query.term)
         .then((data) => {
-            res.json({ data: data });
+            res.json(data);
         })
         .catch((err) => {
-            console.log(err);
             res.json({ error: 'Internal server error'});
+            console.log(err);
         })
 });
 
