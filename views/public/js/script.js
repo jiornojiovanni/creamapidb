@@ -1,8 +1,8 @@
-(function(){
+(function () {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (this.status === 200) {
-            updateGameResults(JSON.parse(this.responseText)); 
+            updateGameResults(JSON.parse(this.responseText));
         } else console.log('Request failed.  Returned status of ' + this);
     };
 
@@ -14,7 +14,7 @@
         queryOnKeyPress(e.target.innerText);
         showGameResults(e.target.innerText.length !== 0);
     };
-    
+
     var queryOnKeyPress = (text) => {
         xhr.open('GET', `/search?term=${encodeURI(text)}`);
         xhr.send();
@@ -45,7 +45,7 @@
             return;
         }
         var appid = e.currentTarget.appid;
-        window.location.href = `/download/${appid}`;
+        window.location.href = `/download/${appid}/?dlc=${dlcs}`;
     };
 
     document.querySelector('.checkbox-list').addEventListener('animationend', (e) => e.target.classList.remove('error-shake'));
