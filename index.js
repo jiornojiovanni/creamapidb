@@ -21,8 +21,8 @@ app.get('/', function (req, res) {
     res.render('game-search');
 });
 
-app.get('/404', function (req, res) {
-    res.render('not-found');
+app.use(function (req, res) {
+    res.status(404).render('not-found');
 });
 
 checkServices()
