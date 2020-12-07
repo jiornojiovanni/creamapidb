@@ -1,10 +1,10 @@
 import { expect } from 'chai';
-import { getSteamSearch } from '../src/helpers/steam-search';
+import getSteamSearch from '../src/helpers/steam-search';
 import searchSteamCMD from '../src/helpers/steam-cmd';
 import { STEAM } from '../src/config/constants';
 
 describe("Testing Steam Search...", () => {
-    it("Is it correctly returning the maximum amount of elements from Steam-CMD?", async () => {
+    it("Is it correctly returning only the maximum amount of elements from Steam-CMD?", async () => {
         const res = await getSteamSearch("counter strike");
         expect(res.length).to.equal(STEAM.MAX_RESULTS);
     })
