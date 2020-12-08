@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { STEAM } from '../config/constants';
 
-
 const getDLCs = (id) => {
     return new Promise((resolve, reject) => {
         axios.get(STEAM.DLCS.URL, { params: STEAM.DLCS.OPTIONS(id) })

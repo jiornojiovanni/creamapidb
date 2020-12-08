@@ -3,12 +3,12 @@ import { compileFile } from 'pug';
 
 const compiledTemplate = compileFile('templates/creamapi.pug');
 
-const getCreamINI = (appid, dlc) => {
+const getCreamINI = (appid, opts) => {
     return new Promise((resolve, reject) => {
-        if (dlc)
+        if (opts.dlcs)
             getDLCs(appid)
                 .then((res) => {
-                    const list = res != null ? res : [];
+                    const list = res || [];
                     resolve(compiledTemplate({ id: appid, dlcs: list }));
                 })
                 .catch((err) => {
