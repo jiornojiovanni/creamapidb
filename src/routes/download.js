@@ -10,7 +10,7 @@ router.get('/download/:id', (req, res) => {
     const dlc     = req.query.dlcs || false;
     const wrapper = req.query.wrapper || false;
     //Catch all malformed id (e.g. if the user try to directly input the id in the link).
-    if (id == null && !Number.isInteger(id)) return res.status(400).json({});
+    if (id == null || !Number.isInteger(id)) res.redirect('/');
     getData(id)
         .then((result) => {
             return Promise.all([buildZip({ id, gamePath: result.path, dlc }), result.name]);
