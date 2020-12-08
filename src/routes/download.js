@@ -7,8 +7,8 @@ const router = Router();
 
 router.get('/download/:id', (req, res) => {
     const id      = req.params.id || null;
-    const dlc     = req.params.dlc || false;
-    const wrapper = req.params.wrapper || false;
+    const dlc     = req.query.dlcs || false;
+    const wrapper = req.query.wrapper || false;
     //Catch all malformed id (e.g. if the user try to directly input the id in the link).
     if (id == null && !Number.isInteger(id)) return res.status(400).json({});
     getData(id)
