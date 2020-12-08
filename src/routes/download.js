@@ -6,19 +6,26 @@ import searchSteamCMD from '../helpers/steam-cmd';
 const router = Router();
 
 router.get('/download/:id', (req, res) => {
-    const id      = req.params.id || null;
-    const dlc     = req.query.dlcs || false;
-    const wrapper = req.query.wrapper || false;
-    //Catch all malformed id (e.g. if the user try to directly input the id in the link).
-    if (id == null || !Number.isInteger(id)) res.redirect('/');
+    const id      = parseInt(req.params.id) || null;
+    const dlcs    = req.query.dlcs == 1 || false;
+    const wrapper = req.query.wrapper == 1 || false;
+    if (id == null || !Number.isInteger(id) || !(wrapper || dlcs)) res.end();
     getData(id)
         .then((result) => {
-            return Promise.all([buildZip({ id, gamePath: result.path, dlc }), result.name]);
+            return Promise.all([
+                buildZip({ 
+                    id, 
+                    gamePath: result.path, 
+                    opts : { dlcs, wrapper } 
+                }), 
+                result.name
+            ]);
         })
         .then(([path, name]) => {
             res.download(path, `${name.toLowerCase()}.zip`);
         })
         .catch((err) => {
+            console.log(err)
             res.json({ err: err.message });
             console.error(err);
         });

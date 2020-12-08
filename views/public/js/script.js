@@ -38,8 +38,8 @@
 
     var onClickResult = (e) => {
         var params = {};
-        if (document.querySelector('#wrapper').checked) params.wrapper = true;
-        if (document.querySelector('#dlcs').checked) params.dlcs = true;
+        if (document.querySelector('#wrapper').checked) params.wrapper = 1;
+        if (document.querySelector('#dlcs').checked) params.dlcs = 1;
         if (Object.keys(params).length === 0) {
             document.querySelector('.checkbox-list').classList.add('error-shake');
             document.activeElement.blur();
