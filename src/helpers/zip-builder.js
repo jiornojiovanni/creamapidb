@@ -30,11 +30,7 @@ const buildZip = ({ id, gamePath, opts }) => {
 
 const getZipInfo = ({ id, name, path }, opts) => {
     return new Promise((resolve, reject) => {
-        buildZip({
-            id,
-            gamePath: path,
-            opts
-        })
+        buildZip({ id, gamePath: path, opts })
             .then((path) => {
                 resolve({ path, name });
             })
