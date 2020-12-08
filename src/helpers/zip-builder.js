@@ -21,6 +21,9 @@ const buildZip = ({ id, gamePath, dlc }) => {
                     archive.directory('bin/', gamePath);
                     archive.finalize();
                 })
+                .catch((err) => {
+                    reject(err);
+                })
         });
     });
 }

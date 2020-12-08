@@ -1,27 +1,23 @@
 import getDLCs from './dlc';
+import { compileFile } from 'pug';
+
+const compiledTemplate = compileFile('templates/creamapi.pug');
 
 const getCreamINI = (appid, dlc) => {
-    let text =
-        '[steam]\n' +
-        `appid = ${appid}\n` +
-        'unlockall = true\n' +
-        'orgapi = steam_api_o.dll\n' +
-        'orgapi64 = steam_api64_o.dll\n' +
-        'extraprotection = false\n' +
-        'forceoffline = false\n' +
-        '[steam_misc]\n' +
-        'disableuserinterface = false\n' +
-        '[dlc]';
+    return new Promise((resolve, reject) => {
+        if (dlc)
+            getDLCs(appid)
+                .then((res) => {
+                    const list = res != null ? res : [];
+                    resolve(compiledTemplate({ id: appid, dlcs: list }));
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        else
+            resolve(compiledTemplate({ id: appid, dlcs: [] }));
+    });
 
-    return getDLCs(appid)
-        .then((res) => {
-            if (dlc == 'false') return text;
-            if (res) res.forEach(element => { text += "\n" + element; });
-            return text;
-        })
-        .catch((err) => {
-            console.log(err.message);
-        })
 }
 
 export default getCreamINI;
