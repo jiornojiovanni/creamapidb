@@ -1,8 +1,10 @@
 import { Client } from 'pg';
 
+let client;
+
 export const connectDb = () => {
-    const client = new Client();
     return new Promise((resolve, reject) => {
+        client = new Client();
         client.connect()
             .then(() => {
                 resolve();
@@ -14,12 +16,8 @@ export const connectDb = () => {
 }
 
 export const cacheGameInfo = ({ id, name, path }) => {
-    const client = new Client();
     return new Promise((resolve, reject) => {
-        client.connect()
-            .then(() => {
-                return client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${path}')`);
-            })
+        client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${path}')`)
             .then(() => {
                 resolve();
             })
@@ -30,12 +28,8 @@ export const cacheGameInfo = ({ id, name, path }) => {
 }
 
 export const getGameInfo = (id) => {
-    const client = new Client();
     return new Promise((resolve, reject) => {
-        client.connect()
-            .then(() => {
-                return client.query(`select id, name, path from gamedata where id=${id}`);
-            })
+        client.query(`select id, name, path from gamedata where id=${id}`)
             .then(({ rows }) => {
                 resolve(rows[0] || null);
             })
