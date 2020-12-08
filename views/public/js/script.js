@@ -40,7 +40,7 @@
         var params = {};
         if (document.querySelector('#wrapper').checked) params.wrapper = true;
         if (document.querySelector('#dlcs').checked) params.dlcs = true;
-        if (!params) {
+        if (Object.keys(params).length === 0) {
             document.querySelector('.checkbox-list').classList.add('error-shake');
             document.activeElement.blur();
             return;
