@@ -17,8 +17,7 @@ router.get('/download/:id', (req, res) => {
             res.download(path, `${name.toLowerCase()}.zip`);
         })
         .catch((err) => {
-            console.log(err)
-            res.json({ err: err.message });
+            res.end()
             console.error(err);
         });
 });
