@@ -2,7 +2,7 @@ import axios from 'axios';
 import { JSDOM } from 'jsdom';
 import { STEAM } from '../config/constants'
 
-const getSteamSearch = (text) => {
+const steamSearch = (text) => {
     return new Promise((resolve, reject) => {
         axios.get(STEAM.SEARCH.URL, { params: STEAM.SEARCH.OPTIONS(text) })
             .then((response) => {
@@ -18,10 +18,10 @@ const getSteamSearch = (text) => {
                         img: e.querySelector('img').getAttribute('src')
                     });
                 }
-                resolve(resultArray);
+                resolve(resultArray.length > 0 ? resultArray : null);
             })
             .catch((err) => { reject(err); });
     });
 }
 
-export default getSteamSearch;
+export default steamSearch;
