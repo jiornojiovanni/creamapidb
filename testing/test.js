@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import getSteamSearch from '../src/helpers/steam-search';
 import searchSteamCMD from '../src/helpers/steam-cmd';
 import buildZip from '../src/helpers/zip-builder';
-import getDLClist from '../src/helpers/dlc';
+import getDLCs from '../src/helpers/dlc';
 import { STEAM, ERRORS } from '../src/config/constants';
 
 // Unit Tests
@@ -66,13 +66,13 @@ describe("UNIT TESTS", () => {
 
         it("Is is correctly retrieving DLCs from Steam?", async () => {
             //It's literally impossible for Crusader Kings 2 to not have DLCs.
-            const res = await getDLClist(TEST6.yesdlc);
+            const res = await getDLCs(TEST6.yesdlc);
             expect(res).to.not.be.empty;
         });
 
-        it("Is it returning an empty result for games with no DLCs?", async () => {
-            const res = await getDLClist(TEST6.nodlc);
-            expect(res).to.be;
+        it("Is it returning a null result for games with no DLCs?", async () => {
+            const res = await getDLCs(TEST6.nodlc);
+            expect(res).to.be.null;
         });
     });
 
