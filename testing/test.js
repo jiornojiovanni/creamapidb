@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import getSteamSearch from '../src/helpers/steam-search';
 import searchSteamCMD from '../src/helpers/steam-cmd';
-import buildZip from '../src/helpers/zip-builder';
+import getZipInfo from '../src/helpers/zip-builder';
 import getDLCs from '../src/helpers/dlc';
 import { STEAM, ERRORS } from '../src/config/constants';
 
@@ -14,9 +14,9 @@ describe("UNIT TESTS", () => {
             expect(res.length).to.equal(STEAM.MAX_RESULTS);
         });
 
-        it("Is it returning an empty result when searching gibberish?", async () => {
+        it("Is it returning a null result when searching gibberish?", async () => {
             const res = await getSteamSearch(".");
-            expect(res).to.be.empty;
+            expect(res).to.be.null;
         });
     });
 
@@ -48,11 +48,18 @@ describe("UNIT TESTS", () => {
 
         const TEST5 = {
             id: 559650,
-            path: "/WitchIt/Binaries/Win64/"
+            name: "Witch It",
+            path: "/WitchIt/Binaries/Win64/",
+            
+        }
+
+        const TEST5opts = {
+            dlcs: true,
+            wrapper: false
         }
 
         it("Is it correctly generating zip files?", async () => {
-            const path = await buildZip(TEST5);
+            const path = await getZipInfo(TEST5, TEST5opts);
             expect(path).to.exist;
         });
     });

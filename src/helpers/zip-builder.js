@@ -28,4 +28,20 @@ const buildZip = ({ id, gamePath, opts }) => {
     });
 }
 
-export default buildZip;
+const getZipInfo = ({ id, name, path }, opts) => {
+    return new Promise((resolve, reject) => {
+        buildZip({
+            id,
+            gamePath: path,
+            opts
+        })
+            .then((path) => {
+                resolve({ path, name });
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}
+
+export default getZipInfo;
