@@ -3,11 +3,16 @@
   src: url('../font/GothamLight.ttf');
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
-  font-family: 'Gotham Light';
-  font-size: 32px;
   background-color: #171a21;
   color: #b8b6b4;
+  font-family: 'Gotham Light';
+  font-size: 32px;
 }
 
 .flex-center {
