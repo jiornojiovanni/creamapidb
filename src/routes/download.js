@@ -8,7 +8,7 @@ router.get('/download/:id', (req, res) => {
     const id      = parseInt(req.params.id) || null;
     const dlcs    = req.query.dlcs == 1 || false;
     const wrapper = req.query.wrapper == 1 || false;
-    if (id == null || !Number.isInteger(id) || !(wrapper || dlcs)) res.end();
+    if (id == null || !Number.isInteger(id) || !(wrapper || dlcs)) res.status(400).render('error-page', { code: 400, message: "bad request" });
     getAppData(id)
         .then((result) => {
             return getZipInfo(result, { dlcs, wrapper });
@@ -17,7 +17,7 @@ router.get('/download/:id', (req, res) => {
             res.download(path, `${name.toLowerCase()}.zip`);
         })
         .catch((err) => {
-            res.end()
+            res.status(500).render('error-page', { code: 500, message: "internal server error" });
             console.error(err);
         });
 });

@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 });
 
 app.use(function (req, res) {
-    res.status(404).render('not-found');
+    res.status(400).render('error-page', { code: 400, message: "not found" });
 });
 
 checkServices()
