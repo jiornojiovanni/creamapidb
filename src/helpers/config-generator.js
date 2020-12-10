@@ -1,7 +1,11 @@
 import getDLCs from './dlc';
-import { compileFile } from 'pug';
+import dot from 'dot';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
-const compiledTemplate = compileFile('templates/creamapi.pug');
+dot.templateSettings.strip = false;
+
+const compiledTemplate = dot.template(readFileSync(resolve("./templates/cream_api.ini")));
 
 const getCreamINI = (appid, opts) => {
     return new Promise((resolve, reject) => {
