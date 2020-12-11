@@ -1,26 +1,23 @@
-import getDLClist from './dlc';
+import dot from 'dot';
+import { readFileSync } from 'fs';
+import path from 'path';
+import getDLCs from './dlc';
 
-const getCreamINI = (appid, dlc) => {
-    let text =
-        '[steam]\n' +
-        `appid = ${appid}\n` +
-        'unlockall = true\n' +
-        'orgapi = steam_api_o.dll\n' +
-        'orgapi64 = steam_api64_o.dll\n' +
-        'extraprotection = false\n' +
-        'forceoffline = false\n' +
-        '[steam_misc]\n' +
-        'disableuserinterface = false\n' +
-        '[dlc]';
+dot.templateSettings.strip = false;
 
-    return getDLClist(appid)
-        .then((res) => {
-            if (dlc == 'false') return text;
-            res.forEach(element => {
-                text += "\n" + element;
+const compiledTemplate = dot.template(readFileSync(path.resolve('./templates/cream_api.ini')));
+
+const getCreamINI = (appid, opts) => new Promise((resolve, reject) => {
+    if (opts.dlcs) {
+        getDLCs(appid)
+            .then((res) => {
+                const list = res || [];
+                resolve(compiledTemplate({ id: appid, dlcs: list }));
+            })
+            .catch((err) => {
+                reject(err);
             });
-            return text;
-        });
-}
+    } else resolve(compiledTemplate({ id: appid, dlcs: [] }));
+});
 
 export default getCreamINI;

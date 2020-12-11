@@ -1,17 +1,22 @@
 const STEAM = {
     SEARCH: {
-        URL: "https://store.steampowered.com/search/results",
-        OPTIONS: (query) => { return { category1: "998", term: query } }
+        URL: 'https://store.steampowered.com/search/results',
+        OPTIONS: (query) => ({ category1: '998', term: query }),
     },
-    MAX_RESULTS: 5
-}
+    DLCS: {
+        URL: 'https://store.steampowered.com/api/appdetails',
+        OPTIONS: (query) => ({ appids: query }),
+    },
+    MAX_RESULTS: 5,
+};
 
 const ERRORS = {
-    CONNECTION_REFUSED: "ECONNREFUSED",
-    MISSING_DATA: "Missing config in game infos."
-}
+    MISSING_DATA: 'Missing config in game infos.',
+    STEAMCMD_ERROR: 'SteamCMD is not working.',
+    DATABASE_ERROR: 'Database is not working.',
+};
 
 export {
     STEAM,
-    ERRORS
-}
+    ERRORS,
+};

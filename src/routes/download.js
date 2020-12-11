@@ -1,24 +1,24 @@
 import Router from 'express';
-import { getGameInfo, cacheGameInfo } from '../helpers/db';
-import buildZip from '../helpers/zip-builder';
-import searchSteamCMD from '../helpers/steam-cmd';
-import { ERRORS } from '../config/constants';
+import getZipInfo from '../helpers/zip-builder';
+import getAppData from '../utils/getAppData';
 
 const router = Router();
 
 router.get('/download/:id', (req, res) => {
-    const id = parseFloat(req.params.id);
-    //Catch all malformed id (e.g. if the user try to directly input the id in the link).
-    if (id == null && !Number.isInteger(id) && isNaN(id)) return res.status(400).json({});
-    getData(id)
-        .then((result) => {
-            return Promise.all([buildZip({ id: result.id, gamePath: result.path, dlc: req.query.dlc }), result.name]);
-        })
-        .then(([path, name]) => {
+    const id = parseInt(req.params.id, 10) || null;
+    const dlcs = req.query.dlcs === '1' || false;
+    const wrapper = req.query.wrapper === '1' || false;
+    if (id == null || !Number.isInteger(id) || !(wrapper || dlcs)) {
+        res.status(400).render('error-page', { code: 400, message: 'bad request' });
+        return;
+    }
+    getAppData(id)
+        .then((result) => getZipInfo(result, { dlcs, wrapper }))
+        .then(({ path, name }) => {
             res.download(path, `${name.toLowerCase()}.zip`);
         })
         .catch((err) => {
-            res.json({ err: err.message });
+            res.status(500).render('error-page', { code: 500, message: 'internal server error' });
             console.error(err);
         });
 });
@@ -26,24 +26,5 @@ router.get('/download/:id', (req, res) => {
 router.get('/download', (req, res) => {
     res.redirect('/');
 });
-
-const getData = (id) => {
-    return new Promise((resolve, reject) => {
-        getGameInfo(id)
-            .then((result) => {
-                if (result) return resolve(result)
-                return Promise.all([searchSteamCMD(id), result == null]);
-            })
-            .then(([result, toCache]) => {
-                if (toCache) {
-                    resolve(result);
-                    return cacheGameInfo(result);
-                }
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
-}
 
 export default router;

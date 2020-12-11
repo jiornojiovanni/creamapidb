@@ -32,20 +32,21 @@
     };
 
     var showGameResults = (bool) => {
-        var classes = document.querySelector('#game-list').classList;
+        let classes = document.querySelector('#game-list').classList;
         bool ? classes.add('visible') : classes.remove('visible');
     };
 
     var onClickResult = (e) => {
-        var wrapper = document.querySelector('#wrapper').checked ? true : false;
-        var dlcs = document.querySelector('#dlcs').checked ? true : false;
-        if (!wrapper && !dlcs) {
+        var params = {};
+        if (document.querySelector('#wrapper').checked) params.wrapper = 1;
+        if (document.querySelector('#dlcs').checked) params.dlcs = 1;
+        if (Object.keys(params).length === 0) {
             document.querySelector('.checkbox-list').classList.add('error-shake');
             document.activeElement.blur();
             return;
         }
-        var appid = e.currentTarget.appid;
-        window.location.href = `/download/${appid}/?dlc=${dlcs}`;
+        let appid = e.currentTarget.appid;
+        window.location.href = `/download/${appid}?${new URLSearchParams(params).toString()}`;
     };
 
     document.querySelector('.checkbox-list').addEventListener('animationend', (e) => e.target.classList.remove('error-shake'));
