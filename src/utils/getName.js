@@ -1,5 +1,3 @@
-const getName = (json) => {
-    return json["common"]["name"];
-}
+const getName = (json) => json.common.name;
 
 export default getName;
