@@ -17,7 +17,12 @@ const buildZip = ({ id, gamePath, opts }) => new Promise((resolve, reject) => {
         getCreamINI(id, opts)
             .then((res) => {
                 archive.append(res, { name: `${gamePath}cream_api.ini` });
-                archive.directory('bin/', gamePath);
+                if (opts.wrapper) {
+                    archive.directory('bin/legacy', gamePath);
+                } else {
+                    archive.directory('bin/modern', gamePath);
+                }
+                archive.directory('bin/steam', gamePath);
                 archive.finalize();
             })
             .catch((error) => {
