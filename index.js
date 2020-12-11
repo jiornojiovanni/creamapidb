@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.use((req, res) => {
-    res.status(400).render('error-page', { code: 400, message: 'not found' });
+    res.status(404).render('error-page', { code: 404, message: 'not found' });
 });
 
 checkServices()
