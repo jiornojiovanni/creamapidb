@@ -11,6 +11,8 @@ const STEAM = {
 };
 
 const ERRORS = {
+    NOT_BUILT: 'Build is required.',
+    ALREADY_BUILT: 'Already built.',
     MISSING_DATA: 'Missing config in game infos.',
     STEAMCMD_ERROR: 'SteamCMD is not working.',
     DATABASE_ERROR: 'Database is not working.',
