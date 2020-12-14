@@ -13,15 +13,12 @@ export const connectDb = () => new Promise((resolve, reject) => {
 });
 
 export const cacheGameInfo = ({ id, name, path }) => new Promise((resolve, reject) => {
-    GameData.create({
-        id,
-        name,
-        path,
-    }).then(() => {
-        resolve();
-    }).catch((err) => {
-        reject(err);
-    });
+    GameData.create({ id, name, path })
+        .then(() => {
+            resolve();
+        }).catch((err) => {
+            reject(err);
+        });
 });
 
 export const getGameInfo = (id) => new Promise((resolve, reject) => {

@@ -31,7 +31,7 @@ const buildZip = ({ id, gamePath, opts }) => new Promise((resolve, reject) => {
     });
 });
 
-const getZipInfo = ({ id, name, path }, opts) => new Promise((resolve, reject) => {
+const getZip = ({ id, name, path }, opts) => new Promise((resolve, reject) => {
     buildZip({ id, gamePath: path, opts })
         .then((zipPath) => {
             resolve({ path: zipPath, name });
@@ -41,4 +41,4 @@ const getZipInfo = ({ id, name, path }, opts) => new Promise((resolve, reject) =
         });
 });
 
-export default getZipInfo;
+export default getZip;
