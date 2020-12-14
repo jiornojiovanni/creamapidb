@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 
 const gameDataSchema = new mongoose.Schema({
-    appid: Number,
+    appid: {
+        type: Number,
+        unique: true
+    },
     name: String,
     path: String,
-}, {
-    versionKey: false,
 });
 
-export default mongoose.model('User', gameDataSchema);
+export default mongoose.model('Gamedata', gameDataSchema);
