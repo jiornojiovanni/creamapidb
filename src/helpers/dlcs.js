@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { STEAM } from '../config/constants';
 
-const getDLCs = (id) => new Promise((resolve, reject) => {
-    axios.get(STEAM.DLCS.URL, { params: STEAM.DLCS.OPTIONS(id) })
+const getDLCs = (appid) => new Promise((resolve, reject) => {
+    axios.get(STEAM.DLCS.URL, { params: STEAM.DLCS.OPTIONS(appid) })
         .then((response) => {
             const json = response.data;
-            if (json[id].data.hasOwnProperty('dlc')) {
-                resolve(json[id].data.dlc);
+            if (json[appid].data.hasOwnProperty('dlc')) {
+                resolve(json[appid].data.dlc);
             } else {
                 resolve(null);
             }
