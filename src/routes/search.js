@@ -3,8 +3,8 @@ import steamSearch from '../helpers/steam-search';
 
 const router = Router();
 
-router.get('/search', (req, res) => {
-    const term = req.query.term || '';
+router.post('/search', (req, res) => {
+    const term = req.body.term || '';
     steamSearch(term)
         .then((data) => { return res.json(data || []); })
         .catch((err) => {
