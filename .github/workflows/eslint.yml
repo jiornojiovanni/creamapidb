@@ -23,6 +23,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Install dev dependencies
+        run: npm install --only=dev
+
       # Runs a single command using the runners shell
       - name: Check code with eslint
         run: npx eslint index.js src/
