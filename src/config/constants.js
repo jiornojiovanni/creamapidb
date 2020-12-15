@@ -18,7 +18,23 @@ const ERRORS = {
     DATABASE_ERROR: 'Database is not working.',
 };
 
+const HTTP_STATUS = {
+    NOT_FOUND: {
+        code: 404,
+        message: 'not found',
+    },
+    INTERNAL_ERROR: {
+        code: 500,
+        message: 'internal server error',
+    },
+    BAD_REQUEST: {
+        code: 400,
+        message: 'bad request',
+    },
+};
+
 export {
     STEAM,
     ERRORS,
+    HTTP_STATUS,
 };
