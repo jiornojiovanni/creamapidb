@@ -1,7 +1,7 @@
 import Router from 'express';
 import getZip from '../helpers/zip';
 import { getGameInfo } from '../helpers/db';
-import { ERRORS } from '../config/constants'; 
+import { ERRORS } from '../config/constants';
 
 const router = Router();
 
@@ -15,13 +15,12 @@ router.post('/download', (req, res) => {
             if (!result) throw Error(ERRORS.NOT_BUILT);
             return getZip(result, { dlcs, wrapper });
         })
-        .then(({ path, name }) => {
-            return res.download(path, `${name.toLowerCase()}.zip`);
-        })
+        .then(({ path }) => res.download(path, `${appid}.zip`))
         .catch((err) => {
             console.log(err);
             return res.status(500).json({ code: 500, message: err.message });
         });
+    return null;
 });
 
 router.get('/download', (req, res) => {

@@ -13,12 +13,8 @@ router.post('/build', (req, res) => {
             if (doc) throw Error(ERRORS.ALREADY_BUILT);
             else return searchSteamCMD(appid);
         })
-        .then((appInfo) => {
-            return cacheGameInfo(appInfo);
-        })
-        .then(() => {
-            return res.status(200).json({ appid, success: true });
-        }) 
+        .then((appInfo) => cacheGameInfo(appInfo))
+        .then(() => res.status(200).json({ appid, success: true }))
         .catch((err) => {
             res.status(500).json({ code: 500, message: err.message });
         });
