@@ -78,7 +78,6 @@
         })
             .then((res) => res.json())
             .then((json) => {
-                console.log(json);
                 resolve(json);
             })
             .catch((err) => reject(err));
