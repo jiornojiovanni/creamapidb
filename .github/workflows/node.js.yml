@@ -35,8 +35,8 @@ jobs:
     - name: Install SteamCMD
       run: npm run install-steamcmd
     
-    - name: Lint code
-      run: npm run lint
-    
     - name: Run tests
       run: npm test
+
+    - name: Lint code
+      run: npm run lint

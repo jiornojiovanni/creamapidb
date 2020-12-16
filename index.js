@@ -24,7 +24,6 @@ app.use(build);
 app.use(download);
 app.use(search);
 
-
 app.get('/', (req, res) => {
     res.render('game-search');
 });
