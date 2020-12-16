@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha ./testing/test.js --recursive --exit --timeout 15000 --require esm",
     "start": "nodemon -r esm index.js",
-    "install-steamcmd": "node -r esm -e 'import steamcmd from \"steamcmd\"; steamcmd.install();'"
+    "install-steamcmd": "node -r esm -e 'import steamcmd from \"steamcmd\"; steamcmd.install();'",
+    "lint": "eslint index.js src/"
   },
   "author": "jiornojiovanni, arciducazagaria",
   "license": "ISC",
