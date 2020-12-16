@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const gameDataSchema = new mongoose.Schema({
     appid: {
         type: Number,
-        unique: true
+        unique: true,
     },
     name: String,
     path: String,

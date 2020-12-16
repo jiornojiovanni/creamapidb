@@ -6,10 +6,8 @@ const router = Router();
 router.post('/search', (req, res) => {
     const term = req.body.term || '';
     steamSearch(term)
-        .then((data) => { return res.json(data || []); })
-        .catch((err) => {
-            return res.json({ error: 'Internal server error' });
-        });
+        .then((data) => res.json(data || []))
+        .catch(() => res.json({ error: 'Internal server error' }));
 });
 
 export default router;

@@ -3,10 +3,10 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import getSteamSearch from '../src/helpers/steam-search';
 import searchSteamCMD from '../src/helpers/steam-cmd';
-import getZipInfo from '../src/helpers/zip-builder';
-import getDLCs from '../src/helpers/dlc';
+import getZip from '../src/helpers/zip';
+import getDLCs from '../src/helpers/dlcs';
 import { STEAM, ERRORS } from '../src/config/constants';
-// Unit Tests
+
 describe('UNIT TESTS', () => {
     describe('Testing Steam Search...', () => {
         it('Is it correctly returning only the maximum amount of elements from SteamCMD?', async () => {
@@ -22,13 +22,13 @@ describe('UNIT TESTS', () => {
 
     describe('Testing Steam-CMD...', () => {
         const TEST3 = {
-            id: 10,
+            appid: 10,
             name: 'Counter-Strike',
             path: '/',
         };
 
         it('Is it correctly parsing data from Steam-CMD?', async () => {
-            const res = await searchSteamCMD(TEST3.id);
+            const res = await searchSteamCMD(TEST3.appid);
             expect(res).to.deep.equal(TEST3);
         });
 
@@ -45,19 +45,19 @@ describe('UNIT TESTS', () => {
 
     describe('Testing Zip generation...', () => {
         const TEST5 = {
-            id: 559650,
+            appid: 559650,
             name: 'Witch It',
             path: '/WitchIt/Binaries/Win64/',
 
         };
 
-        const TEST5opts = {
+        const TEST5OPTS = {
             dlcs: true,
             wrapper: false,
         };
 
         it('Is it correctly generating zip files?', async () => {
-            const path = await getZipInfo(TEST5, TEST5opts);
+            const { path } = await getZip(TEST5, TEST5OPTS);
             expect(path).to.exist;
         });
     });

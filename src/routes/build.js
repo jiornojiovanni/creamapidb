@@ -18,6 +18,7 @@ router.post('/build', (req, res) => {
         .catch((err) => {
             res.status(500).json({ code: 500, message: err.message });
         });
+    return null;
 });
 
 router.get('/build', (req, res) => {
