@@ -1,9 +1,13 @@
 (function script() {
     let searchController = null;
+    const notyf = new Notyf({
+        duration: 4000,
+        ripple: false,
+        position: { x: 'center', y: 'top' },
+    });
 
     const shakeCheckboxes = () => {
         document.querySelector('.checkbox-list').classList.add('error-shake');
-        document.activeElement.blur();
     };
 
     const showLoadingScreen = (bool) => {
@@ -46,6 +50,7 @@
     };
 
     const searchInput = (e) => {
+        if (e.target.innerHTML === '<br>') e.target.lastChild.remove();
         queryOnKeyPress(e.target.innerText);
         showGameResults(e.target.innerText.length !== 0);
     };
@@ -63,10 +68,7 @@
             body: JSON.stringify({ appid }),
         })
             .then((res) => res.json())
-            .then((json) => {
-                console.log(json);
-                resolve(json);
-            })
+            .then((json) => resolve(json))
             .catch((err) => reject(err));
     });
 
@@ -77,9 +79,7 @@
             body: JSON.stringify({ appid }),
         })
             .then((res) => res.json())
-            .then((json) => {
-                resolve(json);
-            })
+            .then((json) => resolve(json))
             .catch((err) => reject(err));
     });
 
@@ -102,6 +102,7 @@
     };
 
     const onClickResult = (e) => {
+        document.activeElement.blur();
         const { appid, wrapper, dlcs } = getParams(e.currentTarget);
         if (!(wrapper || dlcs)) return shakeCheckboxes();
         getReady(appid)
@@ -113,6 +114,7 @@
             .then(({ success }) => {
                 showLoadingScreen(false);
                 if (success) downloadZip({ appid, wrapper, dlcs });
+                else notyf.error('Game is not compatible');
             })
             .catch((err) => console.error(err));
         return null;
