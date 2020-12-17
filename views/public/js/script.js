@@ -114,7 +114,7 @@
             .then(({ success }) => {
                 showLoadingScreen(false);
                 if (success) downloadZip({ appid, wrapper, dlcs });
-                else notyf.error('Game is not compatible');
+                else notyf.error('Game could not be stuffed');
             })
             .catch((err) => console.error(err));
         return null;
