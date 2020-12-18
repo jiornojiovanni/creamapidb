@@ -1,14 +1,15 @@
 import Router from 'express';
 import { getGameInfo } from '../helpers/db';
+import { BadRequest, InternalError } from '../helpers/general-error';
 
 const router = Router();
 
 router.post('/ready', (req, res) => {
     const appid = req.body.appid || null;
-    if (appid === null) return res.status(400).json({ code: 400, message: 'Bad request.' });
+    if (appid === null) return next(new BadRequest());
     getGameInfo(appid)
         .then((doc) => res.status(200).json({ appid, readyToDownload: doc || false }))
-        .catch((err) => res.status(500).json({ code: 500, message: err.message }));
+        .catch((err) => next(new InternalError()));
     return null;
 });
 

@@ -7,6 +7,7 @@ import ready from './src/routes/ready';
 import build from './src/routes/build';
 import checkServices from './src/utils/check';
 import { ERRORS } from './src/config/constants';
+import errorHandler from './src/middleware/error-handler';
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
@@ -31,6 +32,8 @@ app.get('/', (req, res) => {
 app.use((req, res) => {
     res.status(404).render('error-page', { code: 404, message: 'not found' });
 });
+
+app.use(errorHandler);
 
 checkServices()
     .then(() => {
