@@ -1,14 +1,13 @@
 import Router from 'express';
 import steamSearch from '../helpers/steam-search';
-import { InternalError } from '../helpers/general-error';
 
 const router = Router();
 
-router.post('/search', (req, res) => {
+router.post('/search', (req, res, next) => {
     const term = req.body.term || '';
     steamSearch(term)
         .then((data) => res.json(data || []))
-        .catch(() => next(new InternalError()));
+        .catch((err) => next(err));
 });
 
 export default router;

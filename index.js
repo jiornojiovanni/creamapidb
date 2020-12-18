@@ -7,7 +7,7 @@ import search from './src/routes/search';
 import ready from './src/routes/ready';
 import build from './src/routes/build';
 import checkServices from './src/utils/check';
-import { ERRORS, RATE_LIMIT } from './src/config/constants';
+import { ERRORS, RATE_LIMIT, HTTP_STATUS } from './src/config/constants';
 import errorHandler from './src/middleware/error-handler';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 });
 
 app.use((req, res) => {
-    res.status(404).render('error-page', { code: 404, message: 'not found' });
+    res.status(HTTP_STATUS.NOT_FOUND.code).render('error-page', HTTP_STATUS.NOT_FOUND);
 });
 
 app.use(errorHandler);

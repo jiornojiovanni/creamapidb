@@ -21,27 +21,27 @@ const ERRORS = {
 const HTTP_STATUS = {
     NOT_FOUND: {
         code: 404,
-        message: 'not found',
+        message: 'Not found',
     },
     INTERNAL_ERROR: {
         code: 500,
-        message: 'internal server error',
+        message: 'Internal server error',
     },
     BAD_REQUEST: {
         code: 400,
-        message: 'bad request',
+        message: 'Bad request',
     },
     TOO_MANY_REQUESTS: {
         code: 429,
-        message: 'too many requests',
-    }
+        message: 'Too many requests',
+    },
 };
 
 const RATE_LIMIT = {
     windowMs: 15 * 60 * 1000,
     max: 150,
     message: HTTP_STATUS.TOO_MANY_REQUESTS,
-}
+};
 
 export {
     STEAM,

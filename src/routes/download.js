@@ -2,7 +2,8 @@ import Router from 'express';
 import getZip from '../helpers/zip';
 import { getGameInfo } from '../helpers/db';
 import { ERRORS } from '../config/constants';
-import { BadRequest, InternalError } from '../helpers/general-error';
+import BadRequest from '../errors/bad-request';
+import GeneralError from '../errors/general-error';
 
 const router = Router();
 
@@ -13,11 +14,11 @@ router.post('/download', (req, res, next) => {
     if (appid === null || !(wrapper || dlcs)) return next(new BadRequest());
     getGameInfo(appid)
         .then((result) => {
-            if (!result) throw Error(ERRORS.NOT_BUILT);
+            if (!result) throw new GeneralError(ERRORS.NOT_BUILT);
             return getZip(result, { dlcs, wrapper });
         })
         .then(({ path }) => res.download(path, `${appid}.zip`))
-        .catch((err) => next(new InternalError()));
+        .catch((err) => next(err));
     return null;
 });
 
