@@ -3,13 +3,14 @@ import escapePath from '../utils/escapePath';
 import getName from '../utils/getName';
 import getPath from '../utils/getPath';
 import { ERRORS } from '../config/constants';
+import GeneralError from '../errors/general-error';
 
-const searchSteamCMD = (id) => new Promise((resolve, reject) => {
-    steamcmd.getAppInfo(id)
+const searchSteamCMD = (appid) => new Promise((resolve, reject) => {
+    steamcmd.getAppInfo(appid)
         .then((result) => {
-            if (JSON.stringify(result) === '{}' || !result.hasOwnProperty('config')) throw Error(ERRORS.MISSING_DATA);
+            if (JSON.stringify(result) === '{}' || !result.hasOwnProperty('config')) throw new GeneralError(ERRORS.MISSING_DATA);
             resolve({
-                id,
+                appid,
                 name: getName(result),
                 path: escapePath(getPath(result)),
             });

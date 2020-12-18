@@ -1,29 +1,31 @@
 {
   "name": "projectcreamapi",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./testing/test.js --recursive --exit --timeout 15000 --require esm",
     "start": "nodemon -r esm index.js",
-    "install-steamcmd": "node -r esm -e 'import steamcmd from \"steamcmd\"; steamcmd.install();'"
+    "install-steamcmd": "node -r esm -e 'import steamcmd from \"steamcmd\"; steamcmd.install();'",
+    "lint": "eslint index.js src/"
   },
   "author": "jiornojiovanni, arciducazagaria",
   "license": "ISC",
   "dependencies": {
     "archiver": "^5.1.0",
     "axios": "^0.21.0",
+    "chai": "^4.2.0",
     "dot": "^1.1.3",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.3",
     "jsdom": "^16.4.0",
-    "pg": "^8.5.1",
+    "mocha": "^8.2.1",
+    "mongoose": "^5.11.7",
     "pug": "^3.0.0",
     "steamcmd": "git+https://github.com/pierluigizagaria/node-steamcmd.git",
-    "tmp": "^0.2.1",
-    "dotenv": "^8.2.0",
-    "chai": "^4.2.0",
-    "mocha": "^8.2.1"
+    "tmp": "^0.2.1"
   },
   "devDependencies": {
     "eslint": "^7.15.0",

@@ -6,6 +6,9 @@ html
         link(rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon")
         link(rel="icon" href="public/img/favicon.ico" type="image/x-icon")
     body
+        div(id='overlay' class='flex-center')
+            div(class='spinner')
+            p building game for the first time
         div(class='flex-center')
             div(class='checkbox-list')
                 div(class="pretty p-default p-smooth")
@@ -27,6 +30,7 @@ html
                                 div(class='game-img')
                                     img(src='')
                                 div(class='game-name')
+        script(src='public/js/notyf.min.js')
         script(src='public/js/script.js')
 
 

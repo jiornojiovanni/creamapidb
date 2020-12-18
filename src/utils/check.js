@@ -1,5 +1,5 @@
 import steamcmd from 'steamcmd';
-import { connectDb } from './db';
+import { connectDb } from '../helpers/db';
 import { ERRORS } from '../config/constants';
 
 const checkServices = () => new Promise((resolve, reject) => {

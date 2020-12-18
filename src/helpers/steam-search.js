@@ -9,7 +9,6 @@ const steamSearch = (text) => new Promise((resolve, reject) => {
             const dom = new JSDOM(response.data);
             const results = dom.window.document.querySelectorAll('a.search_result_row.ds_collapse_flag');
             const count = Math.min(results.length, STEAM.MAX_RESULTS);
-
             for (let i = 0; i < count; i++) {
                 const e = results[i];
                 resultArray.push({

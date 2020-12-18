@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, develop ]
     
 jobs:
   build:
@@ -20,13 +20,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+    
     - name: Install lib32gcc1
       run: sudo apt-get install lib32gcc1
-    - run: npm ci
+    
+    - name: Install node modules  
+      run: npm ci
+    
     - name: Install SteamCMD
       run: npm run install-steamcmd
-    - run: npm test
+    
+    - name: Run tests
+      run: npm test
+
+    - name: Lint code
+      run: npm run lint

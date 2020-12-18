@@ -1,8 +1,17 @@
 @import './style.css';
+@import './notyf.min.css';
 @import './pretty-checkbox.min.css';
 
 .pretty.p-default input:checked~.state label:after {
     background-color: #23516d!important;
+}
+
+.notyf__toast {
+  max-width: 500px;
+}
+
+.notyf__message {
+  font-size: 17px;
 }
 
 .checkbox-list {

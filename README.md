@@ -1,3 +1,5 @@
+![Node.js CI](https://github.com/jiornojiovanni/creamiapidb/workflows/Node.js%20CI/badge.svg?branch=master)
+
 Welcome to CreamAPI DB
 
 Steps:

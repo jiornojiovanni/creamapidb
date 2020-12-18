@@ -1,26 +1,25 @@
 import Router from 'express';
-import getZipInfo from '../helpers/zip-builder';
-import getAppData from '../utils/getAppData';
+import getZip from '../helpers/zip';
+import { getGameInfo } from '../helpers/db';
+import { ERRORS } from '../config/constants';
+import BadRequest from '../errors/bad-request';
+import GeneralError from '../errors/general-error';
 
 const router = Router();
 
-router.get('/download/:id', (req, res) => {
-    const id = parseInt(req.params.id, 10) || null;
-    const dlcs = req.query.dlcs === '1' || false;
-    const wrapper = req.query.wrapper === '1' || false;
-    if (id == null || !Number.isInteger(id) || !(wrapper || dlcs)) {
-        res.status(400).render('error-page', { code: 400, message: 'bad request' });
-        return;
-    }
-    getAppData(id)
-        .then((result) => getZipInfo(result, { dlcs, wrapper }))
-        .then(({ path, name }) => {
-            res.download(path, `${name.toLowerCase()}.zip`);
+router.post('/download', (req, res, next) => {
+    const appid = req.body.appid || null;
+    const dlcs = req.body.dlcs === true || false;
+    const wrapper = req.body.wrapper === true || false;
+    if (appid === null || !(wrapper || dlcs)) return next(new BadRequest());
+    getGameInfo(appid)
+        .then((result) => {
+            if (!result) throw new GeneralError(ERRORS.NOT_BUILT);
+            return getZip(result, { dlcs, wrapper });
         })
-        .catch((err) => {
-            res.status(500).render('error-page', { code: 500, message: 'internal server error' });
-            console.error(err);
-        });
+        .then(({ path }) => res.download(path, `${appid}.zip`))
+        .catch((err) => next(err));
+    return null;
 });
 
 router.get('/download', (req, res) => {

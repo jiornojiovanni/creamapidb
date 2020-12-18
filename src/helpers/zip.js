@@ -1,9 +1,9 @@
 import { createWriteStream } from 'fs';
 import archiver from 'archiver';
 import { file as _file } from 'tmp';
-import getCreamINI from './config-generator';
+import getCreamINI from './cfg';
 
-const buildZip = ({ id, gamePath, opts }) => new Promise((resolve, reject) => {
+const build = ({ appid, gamePath, opts }) => new Promise((resolve, reject) => {
     _file((err, path) => {
         if (err) reject(err);
         const file = createWriteStream(path);
@@ -14,10 +14,15 @@ const buildZip = ({ id, gamePath, opts }) => new Promise((resolve, reject) => {
         archive.on('error', (error) => { reject(error); });
         archive.pipe(file);
 
-        getCreamINI(id, opts)
+        getCreamINI(appid, opts)
             .then((res) => {
                 archive.append(res, { name: `${gamePath}cream_api.ini` });
-                archive.directory('bin/', gamePath);
+                if (opts.wrapper) {
+                    archive.directory('bin/legacy', gamePath);
+                } else {
+                    archive.directory('bin/modern', gamePath);
+                }
+                archive.directory('bin/steam', gamePath);
                 archive.finalize();
             })
             .catch((error) => {
@@ -26,8 +31,8 @@ const buildZip = ({ id, gamePath, opts }) => new Promise((resolve, reject) => {
     });
 });
 
-const getZipInfo = ({ id, name, path }, opts) => new Promise((resolve, reject) => {
-    buildZip({ id, gamePath: path, opts })
+const getZip = ({ appid, name, path }, opts) => new Promise((resolve, reject) => {
+    build({ appid, gamePath: path, opts })
         .then((zipPath) => {
             resolve({ path: zipPath, name });
         })
@@ -36,4 +41,4 @@ const getZipInfo = ({ id, name, path }, opts) => new Promise((resolve, reject) =
         });
 });
 
-export default getZipInfo;
+export default getZip;

@@ -1,34 +1,26 @@
-import { Client } from 'pg';
-
-let client;
+import mongoose from 'mongoose';
+import GameData from '../models/gamedata.model';
 
 export const connectDb = () => new Promise((resolve, reject) => {
-    client = new Client();
-    client.connect()
-        .then(() => {
-            resolve();
-        })
-        .catch((err) => {
-            reject(err);
-        });
+    mongoose.connect(process.env.MONGOURL, {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }).then(() => {
+        resolve();
+    }).catch((err) => {
+        reject(err);
+    });
 });
 
-export const cacheGameInfo = ({ id, name, path }) => new Promise((resolve, reject) => {
-    client.query(`insert into gamedata(id, name, path) values ('${id}', '${name}', '${path}')`)
-        .then(() => {
-            resolve();
-        })
-        .catch((err) => {
-            reject(err);
-        });
+export const cacheGameInfo = (appInfo) => new Promise((resolve, reject) => {
+    GameData.create(appInfo)
+        .then((doc) => resolve(doc))
+        .catch((err) => reject(err));
 });
 
-export const getGameInfo = (id) => new Promise((resolve, reject) => {
-    client.query(`select id, name, path from gamedata where id=${id}`)
-        .then(({ rows }) => {
-            resolve(rows[0] || null);
-        })
-        .catch((err) => {
-            reject(err);
-        });
+export const getGameInfo = (appid) => new Promise((resolve, reject) => {
+    GameData.findOne({ appid })
+        .then((doc) => resolve(doc))
+        .catch((err) => reject(err));
 });
