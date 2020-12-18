@@ -23,6 +23,7 @@ const build = ({ appid, gamePath, opts }) => new Promise((resolve, reject) => {
                     archive.directory('bin/modern', gamePath);
                 }
                 archive.directory('bin/steam', gamePath);
+                archive.file('bin/README.txt', { name: 'README.txt' });
                 archive.finalize();
             })
             .catch((error) => {
