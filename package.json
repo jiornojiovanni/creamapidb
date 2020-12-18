@@ -19,6 +19,7 @@
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.3",
     "jsdom": "^16.4.0",
     "mocha": "^8.2.1",
     "mongoose": "^5.11.7",
