@@ -91,12 +91,14 @@
         })
             .then((res) => Promise.all([res.blob(), res.headers.get('content-disposition').match(/(?<=")(?:\\.|[^"\\])*(?=")/)[0]]))
             .then(([blob, file]) => {
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = window.URL.createObjectURL(blob);
+                a.href = url;
                 a.download = file;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
+                URL.revokeObjectURL(url);
             })
             .catch((err) => console.error(err));
     };
