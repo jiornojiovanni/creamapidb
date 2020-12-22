@@ -88,3 +88,15 @@
   margin-left: 10px;
   margin-right: 10px;
 }
+
+#donation {
+  font-size: 20px;
+}
+
+#donation > p {
+  margin: 10px;
+}
+
+#donation span {
+  color: #305d8a;
+}
