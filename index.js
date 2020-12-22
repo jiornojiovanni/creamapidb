@@ -20,6 +20,15 @@ const app = express();
 app.set('views', join(__dirname, '/views'));
 app.set('view engine', 'pug');
 
+app.use((req, res, next) => {
+    if (process.env.NODE_ENV !== 'production') return next();
+    if (req.headers['x-forwarded-proto'] === 'https') {
+        return next();
+    }
+    res.redirect(join('https://', req.hostname, req.url));
+    return null;
+});
+
 app.use(limiter);
 app.use('/public', express.static(join(__dirname, '/views/public')));
 app.use(express.json());
