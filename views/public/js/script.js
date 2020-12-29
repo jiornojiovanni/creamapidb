@@ -30,7 +30,7 @@
             e.style.display = results[i] ? 'flex' : 'none';
             if (!results[i]) return;
             e.dataset.appid = results[i].id;
-            e.querySelector('.game-name').innerText = results[i].name;
+            e.querySelector('.game-name > p').innerText = results[i].name;
             e.querySelector('.game-img > img').src = results[i].img;
         });
     };
@@ -83,7 +83,7 @@
             .catch((err) => reject(err));
     });
 
-    const downloadZip = (opts) => {
+    const downloadZip = (opts) => new Promise((resolve, reject) => {
         fetch('/download', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -99,14 +99,17 @@
                 a.click();
                 a.remove();
                 URL.revokeObjectURL(url);
+                resolve();
             })
-            .catch((err) => console.error(err));
-    };
+            .catch((err) => reject(err));
+    });
 
     const onClickResult = (e) => {
-        document.activeElement.blur();
+        e.currentTarget.blur();
+        const gameName = e.currentTarget.querySelector('.game-name');
         const { appid, wrapper, dlcs } = getParams(e.currentTarget);
         if (!(wrapper || dlcs)) return shakeCheckboxes();
+        gameName.classList.add('loading');
         getReady(appid)
             .then(({ readyToDownload }) => {
                 if (readyToDownload) return { success: true };
@@ -115,8 +118,12 @@
             })
             .then(({ success }) => {
                 showLoadingScreen(false);
-                if (success) downloadZip({ appid, wrapper, dlcs });
-                else notyf.error('Game could not be stuffed');
+                if (success) return downloadZip({ appid, wrapper, dlcs });
+                notyf.error('Game could not be stuffed');
+                return null;
+            })
+            .then(() => {
+                gameName.classList.remove('loading');
             })
             .catch((err) => console.error(err));
         return null;
