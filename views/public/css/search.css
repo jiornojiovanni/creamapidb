@@ -106,14 +106,23 @@
   margin: auto 10px auto 10px;
 }
 
-#donation {
+#footer {
   font-size: 20px;
 }
 
-#donation > p {
+#footer > p {
   margin: 10px;
 }
 
-#donation span {
+.donation {
   color: #305d8a;
+}
+
+.credits {
+  float: right;
+}
+
+.credits > a {
+  color: #305d8a;
+  text-decoration: none;
 }
