@@ -23,9 +23,9 @@ body
 			#search
 				p.field(spellcheck='false', contenteditable='true', placeholder='search in db')
 				#game-list
-					a.result.not-found No results found
+					.result.not-found No results found
 					- for (let x = 0; x < 5; x++)
-						a.result(tabindex='0', style='display: none;')
+						.result(tabindex='0', style='display: none;')
 							.game-img
 								img(src='')
 							.game-name
