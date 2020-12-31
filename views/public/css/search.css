@@ -108,21 +108,15 @@
 
 #footer {
   font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
-#footer > p {
+#donation p {
   margin: 10px;
 }
 
-.donation {
-  color: #305d8a;
-}
-
-.credits {
-  float: right;
-}
-
-.credits > a {
-  color: #305d8a;
-  text-decoration: none;
+#credits p {
+  margin: 10px;
 }
