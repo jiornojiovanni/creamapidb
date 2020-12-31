@@ -1,44 +1,42 @@
 doctype html
-html
-    head
-        title='creamapi-db'
-        link(rel='stylesheet', href='public/css/search.css')
-        link(rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon")
-        link(rel="icon" href="public/img/favicon.ico" type="image/x-icon")
-    body
-        div(id='overlay' class='flex-center')
-            div(class='spinner')
-            p building game for the first time
-        div(class='flex-center')
-            div(class='checkbox-list')
-                div(class="pretty p-default p-smooth")
-                    input(id='wrapper' type="checkbox")
-                    div(class="state")
-                        label Wrapper
-                div(class="pretty p-default p-smooth" style='margin-right: 0px;')
-                    input(id='dlcs' type="checkbox")
-                    div(class="state")
-                        label DLCs
-            div(id='console')
-                p(class='symbol')='>'
-                div(id='search')
-                    p(class='field' spellcheck="false" contenteditable="true" placeholder='search in db')
-                    div(id='game-list')
-                        a(class='result not-found') No results found
-                        - for (let x = 0; x < 5; x++)
-                            a(class='result' tabindex="0" style="display: none;")
-                                div(class='game-img')
-                                    img(src='')
-                                div(class='game-name')
-                                    p
-        div(id='footer') 
-            p Tip us a ☕? 
-            p 
-             span(class='donation') BTC: 
-             | 14paGDEwu7f2k9fx2d7uCmiSFWcRtexHLz
-             span(class='credits') All credits for #[a(href="https://cs.rin.ru/forum/viewtopic.php?f=29&t=70576") CreamAPI] goes to Christsnatcher.
-        script(src='public/js/notyf.min.js')
-        script(src='public/js/script.js')
-
-
-                                
+head
+	title creamapi-db
+	link(rel='stylesheet', href='public/css/search.css')
+	link(rel='shortcut icon', href='public/img/favicon.ico', type='image/x-icon')
+	link(rel='icon', href='public/img/favicon.ico', type='image/x-icon')
+body
+	#overlay.flex-center
+		.spinner
+		p building game for the first time
+	.flex-center
+		.checkbox-list
+			.pretty.p-default.p-smooth
+				input#wrapper(type='checkbox')
+				.state
+					label Wrapper
+			.pretty.p-default.p-smooth(style='margin-right: 0px;')
+				input#dlcs(type='checkbox')
+				.state
+					label DLCs
+		#console
+			p.symbol='>'
+			#search
+				p.field(spellcheck='false', contenteditable='true', placeholder='search in db')
+				#game-list
+					.result.not-found No results found
+					- for (let x = 0; x < 5; x++)
+						.result(tabindex='0', style='display: none;')
+							.game-img
+								img(src='')
+							.game-name
+								p
+	#footer
+		#donation
+			p Tip us a ☕? 
+			p.
+				#[span.donation(style='color: #305d8a;') BTC:] 14paGDEwu7f2k9fx2d7uCmiSFWcRtexHLz
+		#credits
+			p.
+				All credits for #[a(href="https://cs.rin.ru/forum/viewtopic.php?f=29&t=70576") CreamAPI] goes to Christsnatcher.
+script(src='public/js/notyf.min.js')
+script(src='public/js/script.js')
