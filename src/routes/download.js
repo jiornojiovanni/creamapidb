@@ -11,7 +11,7 @@ router.post('/download', (req, res, next) => {
     const appid = req.body.appid || null;
     const dlcs = req.body.dlcs === true || false;
     const wrapper = req.body.wrapper === true || false;
-    if (appid === null || Number.isNaN(appid) || !(wrapper || dlcs)) return next(new BadRequest());
+    if (appid === null || !Number.isNaN(appid) || !(wrapper || dlcs)) return next(new BadRequest());
     getGameInfo(appid)
         .then((result) => {
             if (!result) throw new GeneralError(ERRORS.NOT_BUILT);
