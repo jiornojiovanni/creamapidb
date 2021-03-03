@@ -23,7 +23,7 @@
     "jsdom": "^16.4.0",
     "mocha": "^8.2.1",
     "mongoose": "^5.11.7",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "steamcmd": "git+https://github.com/pierluigizagaria/node-steamcmd.git",
     "tmp": "^0.2.1"
   },
