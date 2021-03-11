@@ -37,6 +37,8 @@ body {
 p[contenteditable] {
   min-width: 5px;
   outline: 0;
+  padding: 32px 0 32px 0;
+  margin: 0;
 }
 
 a {
