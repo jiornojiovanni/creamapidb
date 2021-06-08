@@ -36,7 +36,7 @@ describe('UNIT TESTS', () => {
             try {
                 // CSGO does not have correct information, so when called should always fail.
                 await searchSteamCMD(730);
-                throw new Error('Did not correctly throw inside the function.');
+                return '';
             } catch (e) {
                 return expect(e.message).to.equal(ERRORS.MISSING_DATA);
             }
