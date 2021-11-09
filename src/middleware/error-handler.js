@@ -1,7 +1,7 @@
 import GeneralError from '../errors/general-error';
 import { HTTP_STATUS } from '../config/constants';
 
-const middleware = (err, req, res, next) => {
+function middleware(err, req, res, next) {
     if (err instanceof GeneralError) {
         next();
         return res.status(err.code).json({
@@ -14,6 +14,6 @@ const middleware = (err, req, res, next) => {
         status: HTTP_STATUS.INTERNAL_ERROR.code,
         message: HTTP_STATUS.INTERNAL_ERROR.message,
     });
-};
+}
 
 export default middleware;
