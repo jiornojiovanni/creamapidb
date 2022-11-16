@@ -2,7 +2,6 @@
 .github/
 .vscode/
 node_modules/
-.env
 .eslintrc.json
 .gitignore
 testing/
