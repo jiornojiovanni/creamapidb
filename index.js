@@ -9,10 +9,11 @@ import build from './src/routes/build';
 import checkServices from './src/utils/check';
 import { ERRORS, RATE_LIMIT, HTTP_STATUS } from './src/config/constants';
 import errorHandler from './src/middleware/error-handler';
+import https from 'https'
+import fs from 'fs'
 
-if (process.env.NODE_ENV !== 'production') {
-    dotenv.config();
-}
+dotenv.config();
+
 const port = process.env.PORT || 3000;
 const limiter = rateLimiter(RATE_LIMIT);
 
@@ -22,11 +23,12 @@ app.set('view engine', 'pug');
 
 app.use((req, res, next) => {
     if (process.env.NODE_ENV !== 'production') return next();
-    if (req.headers['x-forwarded-proto'] === 'https') {
+    if (req.secure) {
         return next();
+    } else {
+    	res.redirect(join('https://', req.hostname, req.url));
+    	return null;
     }
-    res.redirect(join('https://', req.hostname, req.url));
-    return null;
 });
 
 app.use(limiter);
@@ -61,3 +63,10 @@ checkServices()
             process.exit(-1);
         }
     });
+
+const {key, cert} = {
+	key: fs.readFileSync(process.env.CERTPATH + `/privkey.pem`),
+	cert: fs.readFileSync(process.env.CERTPATH +`/fullchain.pem`)
+}
+
+const httpsServer = https.createServer({key, cert}, app).listen(443)
