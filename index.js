@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { join } from 'path';
 import rateLimiter from 'express-rate-limit';
+import https from 'https';
+import fs from 'fs';
 import download from './src/routes/download';
 import search from './src/routes/search';
 import ready from './src/routes/ready';
@@ -9,8 +11,6 @@ import build from './src/routes/build';
 import checkServices from './src/utils/check';
 import { ERRORS, RATE_LIMIT, HTTP_STATUS } from './src/config/constants';
 import errorHandler from './src/middleware/error-handler';
-import https from 'https'
-import fs from 'fs'
 
 dotenv.config();
 
@@ -25,10 +25,9 @@ app.use((req, res, next) => {
     if (process.env.NODE_ENV !== 'production') return next();
     if (req.secure) {
         return next();
-    } else {
-    	res.redirect(join('https://', req.hostname, req.url));
-    	return null;
     }
+    res.redirect(join('https://', req.hostname, req.url));
+    return null;
 });
 
 app.use(limiter);
@@ -64,9 +63,12 @@ checkServices()
         }
     });
 
-const {key, cert} = {
-	key: fs.readFileSync(process.env.CERTPATH + `/privkey.pem`),
-	cert: fs.readFileSync(process.env.CERTPATH +`/fullchain.pem`)
-}
+const { key, cert } = {
+    key: fs.readFileSync(`${process.env.CERTPATH}/privkey.pem`),
+    cert: fs.readFileSync(`${process.env.CERTPATH}/fullchain.pem`),
+};
 
-const httpsServer = https.createServer({key, cert}, app).listen(443)
+if (process.env.NODE_ENV === 'production') {
+    const httpsServer = https.createServer({ key, cert }, app);
+    httpsServer.listen(443);
+}
